@@ -1,0 +1,28 @@
+.image {
+  border-radius: 70px;
+  width: 3rem;
+  height: 2.5rem;
+  margin-right: 1rem;
+}
+
+.text {
+  margin-left: 26.62rem;
+}
+.flex-container {
+  display: flex;
+  width: 30%;
+  margin-left: auto;
+  justify-content: space-between;
+}
+
+@media (max-width: 70rem) {
+  .image {
+    display: none;
+  }
+  .margin {
+    margin-bottom: 4rem;
+  }
+  .flex-container {
+    display: none;
+  }
+}
