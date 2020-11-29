@@ -1,13 +1,11 @@
 import React from "react";
-import Navigation from "./components/UI/Navigation/Navigation";
-import Header from "./components/UI/Header/Header";
+import Home from "./containers/Home/Home"
 import { Container } from "react-bootstrap";
 function App() {
   return (
     <div className="App">
       <div>
-      <Header/>
-      <Navigation/>
+      <Home/>
       </div>
     </div>
   );

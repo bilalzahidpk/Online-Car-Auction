@@ -1,28 +1,42 @@
-.image {
-  border-radius: 70px;
+.btn-submit {
+  color: white;
+  background: #ff1b68;
+  padding: 0.5rem 1rem;
+  margin-right: 0.4rem;
+  border-radius: 8px;
+  border: #ff1b68;
+}
+
+.btn-submit:hover {
+  color: #ff1b68;
+  background: white;
+  border: none;
+}
+
+.logo {
+  border-radius: 16px;
+  height: 3rem;
   width: 3rem;
-  height: 2.5rem;
-  margin-right: 1rem;
 }
 
-.text {
-  margin-left: 26.62rem;
+.divider {
+  border-left: 1.3px solid black;
+  height: 2.8rem;
+  margin-left: 0.5rem;
+  width: 1rem;
 }
-.flex-container {
+
+.btn-container {
   display: flex;
-  width: 30%;
-  margin-left: auto;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
-@media (max-width: 70rem) {
-  .image {
-    display: none;
+@media (min-width: 63rem) {
+  .nav {
+    position: relative;
   }
-  .margin {
-    margin-bottom: 4rem;
-  }
-  .flex-container {
-    display: none;
+  .btn-container {
+    position: absolute;
+    right: 0;
   }
 }
