@@ -1,0 +1,19 @@
+.link {
+  color: black;
+  padding-bottom: 0.5rem;
+}
+.link:hover {
+  text-decoration: none;
+  color: #ff1b68;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.description {
+  color: #e1ad01;
+  font-weight: bold;
+}
+.box {
+  height: 33vh;
+}

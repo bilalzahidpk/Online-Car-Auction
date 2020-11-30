@@ -1,0 +1,26 @@
+.container {
+  background: white;
+  padding: 0.4rem !important;
+  font-weight: bold;
+  margin-bottom: 6rem !important;
+  margin-left: 7%;
+}
+
+.btn {
+  color: black;
+  background: orange;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: yellow;
+}
+.btn:hover {
+  color: orange;
+  background: black;
+  border: none;
+  text-decoration: none;
+}
+@media (min-width: 58rem) {
+  .car-image {
+    height: 15rem;
+  }
+}

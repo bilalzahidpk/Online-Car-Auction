@@ -4,7 +4,11 @@
   padding: 0.5rem 1rem;
   margin-right: 0.4rem;
   border-radius: 8px;
+  font-weight: bold;
   border: #ff1b68;
+}
+.nav {
+  background: white;
 }
 
 .btn-submit:hover {
@@ -31,7 +35,7 @@
   justify-content: flex-end;
 }
 
-@media (min-width: 63rem) {
+@media (min-width: 62rem) {
   .nav {
     position: relative;
   }

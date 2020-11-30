@@ -1,7 +1,8 @@
 .nav-container {
-  border: 1px solid #d8d8d8 !important;
-  border-left: none;
-  border-right: none;
+  border-top: 1px solid #d8d8d8 !important;
+  border-bottom: 1px solid #d8d8d8 !important;
+  z-index: 100 !important;
+  background: white;
 }
 .nav {
   color: black !important;
@@ -13,6 +14,7 @@
 .button-search {
   color: white;
   background: #ff1b68;
+  font-weight: bold;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   border: #ff1b68;

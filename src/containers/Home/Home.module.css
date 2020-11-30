@@ -1,15 +1,9 @@
-.image-container {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../../assets/Road/Road.jpg") center/cover no-repeat;
-  width: 100vw;
-  height: 50%;
-  color: white;
-  display: none;
-  text-align: center;
+.nav {
+  position: fixed;
+  z-index: 2;
+  width: 100%;
 }
 
-@media (min-width: 55rem) {
-  .image-container {
-    display: block;
-  }
+.section {
+  padding-top: 7.5rem;
 }
