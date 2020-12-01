@@ -3,9 +3,9 @@ import classes from "./Footer.module.css";
 
 function Footer() {
     return (
-        <div className={classes["footer"]} style={{backgroundColor : "white"}}>
-        <div className={["container"]}>
-            <div className="row ">
+        <div className="footer h-25" style={{backgroundColor : "white"}}>
+        <div className="container">
+            <div className="row">
                 <div className="col-md-4 text-center text-md-left ">
                     
                     <div className={[classes["container"],"py-0"].join(" ")}>

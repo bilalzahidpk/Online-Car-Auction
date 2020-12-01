@@ -1,11 +1,11 @@
 import React from "react";
-import Home from "./containers/Home/Home"
+import SignUp from "./containers/Validation/SignUp/SignUp";
 import { Container } from "react-bootstrap";
 function App() {
   return (
     <div className="App">
       <div>
-      <Home/>
+      <SignUp/>
       </div>
     </div>
   );
