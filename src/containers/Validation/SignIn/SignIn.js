@@ -13,9 +13,7 @@ class SignIn extends Component {
              <Header/>   
             <Navigation/>
             </div>
-            <div className={classes["sign-in"]}>
             <SignInForm/>
-            </div>
                 <Footer/>
             </Fragment>
         )

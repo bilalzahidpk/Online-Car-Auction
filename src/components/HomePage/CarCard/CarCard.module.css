@@ -1,11 +1,18 @@
 .container {
   background: white;
   padding: 0.4rem !important;
-  font-weight: bold;
   margin-bottom: 6rem !important;
   margin-left: 7%;
 }
 
+.title {
+  font-weight: bold !important;
+  color: black !important;
+}
+.text {
+  font-weight: 400 !important;
+  color: black !important;
+}
 .btn {
   color: black;
   background: orange;

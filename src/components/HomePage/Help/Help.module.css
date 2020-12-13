@@ -3,7 +3,7 @@
   padding-bottom: 0.5rem;
 }
 .link:hover {
-  color: #ff1b68;
+  color: #ff1b68 !important;
   text-decoration: none;
 }
 .container {

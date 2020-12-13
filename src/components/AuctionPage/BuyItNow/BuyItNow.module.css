@@ -1,7 +1,8 @@
 .nav {
   position: fixed;
-  z-index: 2;
+  z-index: 99;
   width: 100%;
+  /* overflow-y: scroll; */
   left: 0;
   top: 0;
 }

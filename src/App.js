@@ -1,14 +1,15 @@
 import React from "react";
-import SignUp from "./containers/Validation/SignUp/SignUp";
-import { Container } from "react-bootstrap";
+import Home from "./containers/Home/Home"
+import SignUp from "./containers/Validation/SignUp/SignUp"
+import BuyItNow from "./components/AuctionPage/BuyItNow/BuyItNow";
+
 function App() {
   return (
     <div className="App">
-      <div>
-      <SignUp/>
-      </div>
+      <Home/>
     </div>
   );
 }
 
 export default App;
+

@@ -13,10 +13,8 @@ class SignUp extends Component {
              <Header/>   
             <Navigation/>
             </div>
-            <div className={classes["sign-up"]}>
-            <SignUpForm/>
-            </div>
-                <Footer/>
+            <SignUpForm/>  
+            <Footer/>
             </Fragment>
         )
     }

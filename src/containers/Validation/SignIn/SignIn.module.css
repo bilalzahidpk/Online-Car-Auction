@@ -2,7 +2,6 @@
   position: fixed;
   z-index: 2;
   width: 100%;
-}
-.sign-in {
-  padding-top: 7.5rem !important;
+  left: 0;
+  top: 0;
 }

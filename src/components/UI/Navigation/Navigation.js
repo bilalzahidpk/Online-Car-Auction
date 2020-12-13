@@ -29,7 +29,7 @@ const Navigation = () => {
         </div>
       </li>
       <li className="nav-item">
-        <a className={[classes["nav"],"nav-link"].join(" ")} href="#">Trends</a>
+        <a className={[classes["nav"],"nav-link active"].join(" ")} href="#">Trends</a>
       </li>
       <li className="nav-item">
         <a className={[classes["nav"],"nav-link"].join(" ")} href="#">Forums</a>

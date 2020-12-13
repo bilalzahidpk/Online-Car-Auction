@@ -3,7 +3,7 @@ import Header from "../../components/UI/Header/Header";
 import Navigation from "../../components/UI/Navigation/Navigation";
 import HomeImage from "../../components/HomePage/HomeImage/HomeImage";
 import classes from "./Home.module.css";
-import CarGrid from "../../components/HomePage/CarGrid/CarGrid";
+import CarGrid from "../../containers/CarGrid/CarGrid";
 import Help from "../../components/HomePage/Help/Help";
 import Footer from "../../components/UI/Footer/Footer";
 
@@ -15,11 +15,11 @@ class Home extends Component {
                 <Header/>
                <Navigation/>
                </div>
-                <div className={classes["section"]}>
+               <div className={classes["main"]}>
                <HomeImage/>
                <CarGrid/>
-               </div> 
                <Help/>
+               </div>
                 <Footer/>                   
                     </Fragment>
         )

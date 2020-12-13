@@ -37,6 +37,7 @@
   background: #333333;
   font-weight: bold;
   font-size: 1.5rem;
+  min-height: calc(100vh - 16rem - 4rem - 3.5rem);
 }
 .register-text {
   padding-bottom: 0.3rem;

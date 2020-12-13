@@ -9,6 +9,7 @@
 }
 .nav {
   background: white;
+  width: 100%;
 }
 
 .btn-submit:hover {
