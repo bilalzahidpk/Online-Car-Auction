@@ -2,12 +2,13 @@
   border-top: 1px solid #d8d8d8 !important;
   border-bottom: 1px solid #d8d8d8 !important;
   z-index: 100 !important;
-  background: white;
+  background: white !important;
   width: 100%;
 }
 .nav {
   color: black !important;
   padding: 0.5rem;
+  background: white !important;
 }
 .nav:hover {
   color: #ff1b68 !important;

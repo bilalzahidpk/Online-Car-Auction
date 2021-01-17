@@ -1,0 +1,414 @@
+.main-container {
+  background-color: whitesmoke;
+  padding-bottom: 5rem;
+  height: 100%;
+  margin-top: 0%;
+}
+
+.nav-links {
+  padding: 1rem;
+}
+
+.links {
+  /* background-color: white; */
+  color: #ff5454;
+  font-weight: 600;
+}
+
+.topContainer {
+  display: flex;
+  /* background-color: whitesmoke; */
+  flex-wrap: wrap;
+  margin-left: 2rem;
+  /* align-items: center; */
+  /* justify-content: center; */
+}
+
+.sliderContainer {
+  flex: 35 35;
+  padding: 1rem;
+}
+
+.details-container {
+  flex: 35 35;
+  padding: 1rem;
+}
+
+.vehicleName {
+  font-weight: 600;
+}
+
+.pre-bid {
+  font-weight: 600;
+}
+
+.nested-flex {
+  display: flex;
+  /* flex-wrap: wrap; */
+}
+
+.top-buttons {
+  flex: 33 33;
+  padding: 0.5rem;
+}
+
+.all-details {
+  flex: 33 33;
+  padding: 0.5rem;
+}
+
+.all-details > p {
+  padding-bottom: 1rem;
+}
+
+.auction-button {
+  color: white;
+  width: 15rem;
+  border-radius: 1rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  background-color: #ff5454 !important;
+  border-color: #ff5454;
+  /* font-weight: 600; */
+}
+
+.auction-button:hover {
+  color: #ff5454;
+  background-color: white !important ;
+  border: #ff5454;
+}
+
+.BuyNow-button {
+  width: 15rem;
+  border-radius: 1rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.WatchList-button {
+  width: 15rem;
+  background-color: white;
+  border-radius: 1rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.optionsContainer {
+  background-color: whitesmoke;
+  display: flex;
+  flex-wrap: wrap;
+  /* grid-template-columns: repeat(4, auto);
+  grid-template-rows: repeat(1, auto);
+  grid-column-gap: 1rem;
+  grid-gap: 0rem; */
+  /* padding: 1rem; */
+  text-align: center;
+  justify-content: center;
+}
+
+.make-an-offer {
+  flex: 20 20 20 20;
+  background-color: white;
+  text-align: center;
+  border-radius: 1rem;
+  padding: 1rem 3rem 1rem 3rem;
+  width: 18rem;
+  height: 7rem;
+  border: 1px solid #dedede;
+  cursor: pointer;
+  box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.07);
+  margin: 0.3rem;
+  /* box-shadow: white; */
+}
+
+.lower-container {
+  background-color: white;
+  box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.07);
+  margin: 1rem;
+  margin-left: 4rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #dedede;
+}
+
+.ownership-vpn-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ownership-cost {
+  flex: 40 40;
+  padding: 1rem;
+  border: 1px solid #dedede;
+  border-radius: 0.5rem;
+  margin-right: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.vin-conatiner {
+  flex: 40 40;
+}
+
+.detailing {
+  text-align: right;
+  padding-left: 15rem;
+}
+
+.table-data {
+  padding: 18rem;
+  background-color: white;
+}
+
+tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+td {
+  padding: 0.3rem;
+}
+
+.ownership-cost > h4 {
+  font-weight: 600;
+}
+.ownership-cost > p {
+  padding-left: 0.5rem;
+  font-weight: 600;
+}
+.horizontal-line {
+}
+
+.assumptions-estimates {
+  display: flex;
+}
+.assumptions-container {
+  flex: 50 50;
+  padding-right: 2rem;
+}
+.assumptions-container > .heading {
+  font-weight: 600;
+  margin: 0%;
+}
+
+.estimates-container {
+  flex: 50 50;
+}
+.estimates-container {
+  margin-top: 1rem;
+  flex: 40 40;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, 1.5rem);
+}
+.estimates-container > .heading {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.estimates-container > .heading {
+  font-weight: 600;
+  margin: 0%;
+}
+.estimates-container > .mileage {
+  padding-right: 0.5rem;
+}
+.estimates-container > .mileage-value {
+  font-weight: 600;
+}
+
+.assumptions-details {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(10, auto);
+  grid-column-gap: 0.5rem;
+}
+.assumptions-container > .mileage-value,
+.mi-year-value,
+.depriciation-value,
+.insurance-value,
+.fuel-value,
+.maintenance-value,
+.repairs-value,
+.taxes-value {
+  font-weight: 600;
+}
+.assumptions-container > .mileage,
+.mi-year,
+.depriciation,
+.insurance,
+.fuel,
+.maintenance,
+.repairs,
+.taxes {
+  /* padding-right: 0.5rem; */
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+@media only screen and (min-width: 370px) and (max-width: 670px) {
+  .vin-conatiner {
+    display: none;
+  }
+  .lower-container {
+    /* position: absolute; */
+    margin: auto;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.07);
+    border: 1px solid #dedede;
+  }
+  .ownership-cost {
+    margin: auto;
+    /* display: flex; */
+    /* position: relative; */
+  }
+  .assumptions-estimates {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .assumptions-container {
+    flex: 40 40;
+  }
+  .estimates-container {
+    margin-top: 1rem;
+    flex: 40 40;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(2, 2.5rem);
+    grid-row-gap: 0.5rem;
+  }
+  .assumptions-container > .assumptions-details > .mileage-value-1,
+  .mi-year-value,
+  .depriciation-value,
+  .insurance-value,
+  .fuel-value,
+  .maintenance-value,
+  .repairs-value,
+  .taxes-value,
+  .mileage-value-1 {
+    padding-left: 2rem;
+  }
+  .ownership-vpn-container {
+    /* position: absolute; */
+    /* width: 10rem; */
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .topContainer {
+    display: flex;
+    background-color: whitesmoke;
+    flex-wrap: wrap;
+    margin-left: 0%;
+    /* justify-content: center; */
+  }
+  .sliderContainer {
+    flex: 35 35;
+    padding: 0%;
+  }
+
+  .details-container {
+    flex: 35 35;
+    padding: 1rem;
+    text-align: center;
+  }
+  .nested-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .optionsContainer {
+    background-color: whitesmoke;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 0%;
+    /* grid-template-columns: repeat(4, auto);
+    grid-template-rows: repeat(1, auto);
+    grid-column-gap: 1rem;
+    grid-gap: 0rem; */
+    /* margin-left: 3rem; */
+    /* text-align: center; */
+    /* justify-content: center; */
+  }
+  .make-an-offer {
+    flex: 20 20 20 20;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1rem 3rem 1rem 3rem;
+    width: 20rem;
+    height: 7rem;
+    border: 1px solid #dedede;
+    cursor: pointer;
+    box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.07);
+    margin-bottom: 0rem;
+    /* margin: 1rem; */
+    /* box-shadow: white; */
+  }
+  .lower-container {
+    /* position: absolute; */
+    width: 20.5rem;
+    position: center;
+    margin: auto;
+    margin-top: 1rem;
+    box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.07);
+    border: 1px solid #dedede;
+    /* display: flex; */
+  }
+  .ownership-vpn-container {
+    /* position: absolute; */
+    /* width: 10rem; */
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+  .ownership-cost {
+    flex: 50 50;
+    /* position: absolute; */
+    margin-bottom: 3rem;
+    height: 29rem;
+    margin: auto;
+  }
+  .assumptions-estimates {
+    /* position: absolute; */
+    flex: 50 50;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .assumptions-container {
+    flex: 50 50;
+  }
+  .assumptions-container > .assumptions-details > .mileage-value-1,
+  .mi-year-value,
+  .depriciation-value,
+  .insurance-value,
+  .fuel-value,
+  .maintenance-value,
+  .repairs-value,
+  .taxes-value,
+  .mileage-value-1 {
+    margin-left: 4rem;
+  }
+  .estimates-container {
+    margin-top: 1rem;
+    flex: 50 50;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(2, auto);
+  }
+  .estimates-container > .heading {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  .vin-conatiner {
+    display: none;
+  }
+}

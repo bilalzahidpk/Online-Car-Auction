@@ -15,38 +15,52 @@ const Navigation = () => {
   <div className="collapse navbar-collapse" id="navbarSupportedContent">
     <ul className="navbar-nav mr-auto">
       <li className="nav-item active">
-        <a className={[classes["nav"],"nav-link"].join(" ")} href="#">Home <span className="sr-only">(current)</span></a>
+        <Link className={[classes["nav"],"nav-link"].join(" ")} to="/">Home <span className="sr-only">(current)</span></Link>
       </li>
       
       <li className="nav-item dropdown">
-        <a className={[classes["nav-dropdown"],"nav-link dropdown-toggle"].join(" ")} href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <Link className={[classes["nav-dropdown"],"nav-link dropdown-toggle"].join(" ")} to="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Auctions
-        </a>
+        </Link>
         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} href="#">Dealer Auctions</a>
-          <a className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} href="#">Savage Auctions</a>
-          <a className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} href="#">Live Auctions</a>
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/buyitnow">Dealer Auctions</Link>
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/buyitnow">Savage Auctions</Link>
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/buyitnow">Live Auctions</Link>
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/buyitnow">Buy It Now</Link>
         </div>
       </li>
       <li className="nav-item">
-        <a className={[classes["nav"],"nav-link active"].join(" ")} href="#">Trends</a>
+        <Link className={[classes["nav"],"nav-link"].join(" ")} to="/">Trends</Link>
       </li>
       <li className="nav-item">
-        <a className={[classes["nav"],"nav-link"].join(" ")} href="#">Forums</a>
+        <Link className={[classes["nav"],"nav-link"].join(" ")} to="/">Forums</Link>
       </li>
       
-      <li className="nav-item">
-        <a className={[classes["nav"],"nav-link"].join(" ")} href="#">Ratings</a>
+      {/* <li className="nav-item">
+        <Link className={[classes["nav"],"nav-link"].join(" ")} to="/">Ratings</Link>
+      </li> */}
+   
+    {/* Please uncomment Ratings after FYP & Delete Support Code!!!!!!!*/}
+
+      <li className="nav-item dropdown">
+        <Link className={[classes["nav-dropdown"],"nav-link dropdown-toggle"].join(" ")} to="#" id="navbarDropdown" role="button" data-hover="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Support
+        </Link>
+        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/buyertips">Buyer Tips</Link>
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/ourfee">Our Fee</Link>
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/faq">FAQ</Link>
+        </div>
       </li>
 
       <li className="nav-item dropdown">
-        <a className={[classes["nav-dropdown"],"nav-link dropdown-toggle"].join(" ")} href="#" id="navbarDropdown" role="button" data-hover="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <Link className={[classes["nav-dropdown"],"nav-link dropdown-toggle"].join(" ")} to="#" id="navbarDropdown" role="button" data-hover="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Services
-        </a>
+        </Link>
         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} href="#">Car Inspection</a>
-          <a className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} href="#">Car Insurance</a>
-          <a className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} href="#">Car Loan</a>
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/">Car Inspection</Link>
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/">Car Insurance</Link>
+          <Link className={[classes["nav-dropdown"],"dropdown-item"].join(" ")} to="/">Car Loan</Link>
         </div>
       </li>
     </ul>

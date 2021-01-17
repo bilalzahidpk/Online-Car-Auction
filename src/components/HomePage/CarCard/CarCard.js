@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import classes from "./CarCard.module.css";
+import Skeleton from 'react-loading-skeleton';
+import { Link } from "react-router-dom";
 
 class CarCard extends Component {
     render() {
@@ -16,7 +18,7 @@ class CarCard extends Component {
           <p className={["card-text",classes["text"]].join(" ")}>Auction in 2h 30m 40s</p>
             <br></br>
             <p className={["card-text",classes["text"]].join(" ")}>Pre Auction charges: <span style={{color:"#1874CD"}}>$50</span></p>              
-            <a href="#" className={classes["btn"]}>Participate Now!</a>
+            <Link to="/" className={classes["btn"]}>Participate Now!</Link>
           </div>
         </div>
    
