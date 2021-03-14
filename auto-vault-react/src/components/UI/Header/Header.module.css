@@ -1,0 +1,47 @@
+.btn-submit {
+  color: white;
+  background: #ff1b68;
+  padding: 0.5rem 1rem;
+  margin-right: 0.4rem;
+  border-radius: 8px;
+  font-weight: bold;
+  border: #ff1b68;
+}
+.nav {
+  background: white;
+  width: 100%;
+}
+
+.btn-submit:hover {
+  color: #ff1b68;
+  background: white;
+  border: none;
+}
+
+.logo {
+  border-radius: 16px;
+  height: 3rem;
+  width: 3rem;
+}
+
+.divider {
+  border-left: 1.3px solid black;
+  height: 2.8rem;
+  margin-left: 0.5rem;
+  width: 1rem;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 62rem) {
+  .nav {
+    position: relative;
+  }
+  .btn-container {
+    position: absolute;
+    right: 0;
+  }
+}
