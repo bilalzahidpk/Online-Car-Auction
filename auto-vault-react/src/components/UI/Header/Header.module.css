@@ -2,7 +2,6 @@
   color: white;
   background: #ff1b68;
   padding: 0.5rem 1rem;
-  margin-right: 0.4rem;
   border-radius: 8px;
   font-weight: bold;
   border: #ff1b68;
@@ -10,6 +9,7 @@
 .nav {
   background: white;
   width: 100%;
+  justify-content: space-between;
 }
 
 .btn-submit:hover {
@@ -25,23 +25,25 @@
 }
 
 .divider {
-  border-left: 1.3px solid black;
-  height: 2.8rem;
-  margin-left: 0.5rem;
-  width: 1rem;
+  border: thin solid black;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    transparent calc(50% - 0.81px),
+    black calc(50% - 0.8px),
+    black calc(50% + 0.8px),
+    transparent calc(50% + 0.81px),
+    transparent 100%
+  );
 }
 
 .btn-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  flex-basis: 13.5rem;
 }
 
-@media (min-width: 62rem) {
-  .nav {
-    position: relative;
-  }
-  .btn-container {
-    position: absolute;
-    right: 0;
-  }
+.auth-container {
+  display: flex;
+  justify-content: flex-end;
 }

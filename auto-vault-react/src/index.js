@@ -4,40 +4,54 @@ import './index.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storage from 'redux-persist/lib/storage';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import authReducer from './store/reducers/auth';
 
-const logger = store => {
-  return next => {
-      return action => {
-          console.log('[Middleware] Dispatching', action);
-          const result = next(action);
-          console.log('[Middleware] next state', store.getState());
-          return result;
-      }
-  }
+const persistConfig = {
+  key: 'root',
+  storage,
+};
+
+const logger = (store) => {
+  return (next) => {
+    return (action) => {
+      console.log('[Middleware] Dispatching', action);
+      const result = next(action);
+      console.log('[Middleware] next state', store.getState());
+      return result;
+    };
+  };
 };
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
-    auth: authReducer
+  auth: authReducer,
 });
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+const store = createStore(
+  persistedReducer,
+  composeEnhancers(applyMiddleware(logger, thunk))
+);
+let persistor = persistStore(store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    </Router>
-  </Provider>
-,
+    <PersistGate persistor={persistor}>
+      <Router>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      </Router>
+    </PersistGate>
+  </Provider>,
   document.getElementById('root')
 );
 
