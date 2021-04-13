@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as actionTypes from './actionTypes';
+import persistor from '../../index';
 
 let logOutTimer;
 
@@ -53,11 +54,12 @@ export const logoutSuccess = () => {
 };
 
 export const logout = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     localStorage.removeItem('expiryDate');
     localStorage.removeItem('user');
+    await persistor.purge();
     if (logOutTimer) {
       clearTimeout(logOutTimer);
     }
