@@ -148,7 +148,7 @@ class AddCar extends Component {
           </option>
           <option value='Alto'>Alto</option>
           <option value='Cultus'>Cultus</option>
-          <option value='Wagon'>Wagon R</option>
+          <option value='WagonR'>Wagon R</option>
           <option value='Swift'>Swift</option>
         </Fragment>
       );
@@ -179,6 +179,7 @@ class AddCar extends Component {
     for (const file of this.state.images) {
       data.append('images', file);
     }
+    console.log(data);
     data.append('pdfFile', this.state.pdfFile[0]);
     axios
       .post('http://localhost:5000/car/addcar/', data, {
@@ -186,18 +187,19 @@ class AddCar extends Component {
           Authorization: 'Bearer ' + token,
         },
       })
-      .then((res) => console.log(res));
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   render() {
     return (
       <div style={{ paddingTop: '0.25rem' }}>
         <nav aria-label='breadcrumb'>
-          <ol class='breadcrumb'>
-            <li class='breadcrumb-item'>
+          <ol className='breadcrumb'>
+            <li className='breadcrumb-item'>
               <Link to='/'>Home</Link>
             </li>
-            <li class='breadcrumb-item active' aria-current='page'>
+            <li className='breadcrumb-item active' aria-current='page'>
               Post Car Ad
             </li>
           </ol>
@@ -263,12 +265,12 @@ class AddCar extends Component {
                 <option value='' disabled selected>
                   Select Color
                 </option>
-                <option value='Suzuki'>White</option>
-                <option value='Toyota'>Red</option>
-                <option value='Honda'>Black</option>
-                <option value='Suzuki'>Silver</option>
-                <option value='Suzuki'>Blue</option>
-                <option value='Suzuki'>Beige</option>
+                <option value='White'>White</option>
+                <option value='Red'>Red</option>
+                <option value='Black'>Black</option>
+                <option value='Silver'>Silver</option>
+                <option value='Blue'>Blue</option>
+                <option value='Beige'>Beige</option>
               </select>
             </div>
             <div class='form-group'>

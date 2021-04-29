@@ -14,6 +14,7 @@ import pic1 from './1.jpg';
 import pic2 from './2.jpg';
 import pic3 from './3.jpg';
 import MakeAnOffer from './MakeAnOffer.PNG';
+import axios from 'axios';
 
 class CarDetail extends Component {
   state = {
@@ -26,6 +27,16 @@ class CarDetail extends Component {
     }));
     setTimeout(() => console.log('Hello'), 10000);
   };
+
+  componentDidMount() {
+    if (!this.props.location.vehicle) {
+      // axios.get()
+    }
+
+    // else {
+    //   this.
+    // }
+  }
 
   render() {
     return (
@@ -52,14 +63,18 @@ class CarDetail extends Component {
         <div className={classes['topContainer']}>
           <div className={classes['sliderContainer']}>
             <Carousel autoPlay interval='1000' transitionTime='1000'>
-              <img src={pic1} />
-              <img src={pic2} />
-              <img src={pic3} />
+              {this.props.location.vehicle.imageUrl.map((image) => (
+                <img src={image} />
+              ))}
             </Carousel>
           </div>
           <div className={classes['details-container']}>
-            <h1 className={classes['vehicleName']}>Toyota Corolla XLI 2005</h1>
-            <p className={classes['pre-bid']}>Current Pre-bid: $225</p>
+            <h1 className={classes['vehicleName']}>
+              {`${this.props.location.vehicle.make} ${this.props.location.vehicle.model} ${this.props.location.vehicle.year}`}{' '}
+            </h1>
+            <p className={classes['pre-bid']}>
+              Current Pre-bid: {this.props.location.vehicle.preBidPrice + '$'}
+            </p>
             <div className={classes['nested-flex']}>
               <div className={classes['top-buttons']}>
                 <button
@@ -116,9 +131,9 @@ class CarDetail extends Component {
                 </p>
                 <p>
                   <img src={Title} className={classes['title-icon']} />
-                  Milage
+                  Mileage
                   <br />
-                  28,489 (Actual)
+                  {this.props.location.vehicle.mileage + ' km'} (Actual)
                 </p>
                 <p>
                   <img src={Title} className={classes['title-icon']} />
@@ -179,22 +194,13 @@ class CarDetail extends Component {
             <h2 className={classes['sellers-comments__heading']}>
               <strong>Seller's Comments</strong>
             </h2>
-            <p>
-              E Inside out fully original. In showroom condition. 100%
-              maintained by dealership. All service history log maintained.
-              Price is slightly negotiable. After Market Alloy rims. Original
-              book of this car is also available. All original documents are
-              complete. Never been into any accident. New tires installed
-              recently. Token tax is up to date. Urgently need to sellthe car.
-              Totally driven on petrol. Engine is good condition. Call/SMS only
-              during office hours please.{' '}
-            </p>
+            <p>{this.props.location.vehicle.comments}</p>
           </div>
           <div className={classes['car-details-conatiner']}>
             <div className={classes['car-details__item']}>
               <div>VIN </div>
               <div>
-                <strong>1FMCU0F74FUB24632</strong>
+                <strong>{this.props.location.vehicle.vin}</strong>
               </div>
             </div>
             <div className={classes['car-details__item']}>
@@ -218,25 +224,25 @@ class CarDetail extends Component {
             <div className={classes['car-details__item']}>
               <div>Year</div>
               <div>
-                <strong>2015</strong>
+                <strong>{this.props.location.vehicle.year}</strong>
               </div>
             </div>
             <div className={classes['car-details__item']}>
               <div>Make</div>
               <div>
-                <strong>FORD</strong>
+                <strong>{this.props.location.vehicle.make}</strong>
               </div>
             </div>
             <div className={classes['car-details__item']}>
               <div>Model</div>
               <div>
-                <strong>ESCAPE</strong>
+                <strong>{this.props.location.vehicle.model}</strong>
               </div>
             </div>
             <div className={classes['car-details__item']}>
               <div>Color</div>
               <div>
-                <strong>White</strong>
+                <strong>{this.props.location.vehicle.color}</strong>
               </div>
             </div>
             <div className={classes['car-details__item']}>
@@ -248,7 +254,7 @@ class CarDetail extends Component {
             <div className={classes['car-details__item']}>
               <div>Transmission Type</div>
               <div>
-                <strong>Automatic</strong>
+                <strong>{this.props.location.vehicle.transmissionType}</strong>
               </div>
             </div>
             <div className={classes['car-details__item']}>
@@ -258,9 +264,9 @@ class CarDetail extends Component {
               </div>
             </div>
             <div className={classes['car-details__item']}>
-              <div>Fuel Type</div>
+              <div>Engine Type</div>
               <div>
-                <strong>Gas</strong>
+                <strong>{this.props.location.vehicle.engineType}</strong>
               </div>
             </div>
           </div>

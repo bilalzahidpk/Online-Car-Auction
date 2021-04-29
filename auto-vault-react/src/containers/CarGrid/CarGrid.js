@@ -6,7 +6,7 @@ class CarGrid extends Component {
   render() {
     return (
       <div className={[classes['container'], 'row'].join(' ')}>
-        <div className='col-12 col-lg-4 col-md-6 xs-12'>
+        {/* <div className='col-12 col-lg-4 col-md-6 xs-12'>
           <CarCard />
         </div>
         <div className='col-12 col-lg-4 col-md-6 xs-12'>
@@ -14,7 +14,7 @@ class CarGrid extends Component {
         </div>
         <div className='col-12 col-lg-4 col-md-6 xs-12'>
           <CarCard />
-        </div>
+        </div> */}
         {/* <div className="col-3 col-md-4 col-sm-12"><CarCard/></div> */}
       </div>
     );

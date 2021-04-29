@@ -30,7 +30,8 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    'mongodb+srv://autovault:autovault123@cluster0.xn1jn.mongodb.net/auto-vault?retryWrites=true&w=majority'
+    'mongodb+srv://autovault:autovault123@cluster0.xn1jn.mongodb.net/auto-vault?retryWrites=true&w=majority',
+    { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then((result) => {
     app.listen(5000);

@@ -37,6 +37,10 @@ const vehicleSchema = new Schema(
     drivetrain: {
       type: String,
     },
+    comments: {
+      type: String,
+      required: true,
+    },
     engineType: {
       type: String,
       required: true,

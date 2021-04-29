@@ -68,6 +68,11 @@
   width: 100%;
 }
 
+.date-time {
+  margin-left: 0.3rem;
+  margin-top: 0.5rem;
+}
+
 .filter-btn {
   color: white;
   background: #ff1b68;
@@ -204,7 +209,7 @@ search-container {
     margin-top: 0;
 
     width: 75%;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: space-between;
     flex-wrap: wrap;
   }
@@ -234,7 +239,7 @@ search-container {
     margin-left: 1rem;
     display: flex;
     width: 75%;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: space-between;
     margin-bottom: 1rem !important;
     margin-top: 0;

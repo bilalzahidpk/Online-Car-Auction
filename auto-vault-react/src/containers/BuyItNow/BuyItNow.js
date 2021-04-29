@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import CarSearch from '../CarSearch/CarSearch';
 import CarCard from '../../components/HomePage/CarCard/CarCard';
+import Datetime from 'react-datetime';
 import classes from './BuyItNow.module.css';
+import axios from 'axios';
 
 class BuyItNow extends Component {
   state = {
@@ -14,7 +16,31 @@ class BuyItNow extends Component {
     modelOpen: true,
     yearOpen: true,
     priceOpen: true,
+    bodyType: [],
+    country: [],
+    city: [],
+    make: [],
+    model: [],
+    year: '',
+    price: '',
+    page: 1,
+    limit: 12,
+    vehicles: '',
+    timeLeft: '',
+    intervalId: '',
   };
+
+  componentDidMount() {
+    axios
+      .get('http://localhost:5000/car/getcars/', {
+        params: {
+          page: this.state.page,
+          limit: this.state.limit,
+        },
+      })
+      .then((res) => this.setState({ vehicles: res.data.vehicles }))
+      .catch((err) => console.log(err));
+  }
 
   onChangeHandler = (event) => {
     console.log(event.target.value);
@@ -23,7 +49,7 @@ class BuyItNow extends Component {
       car: event.target.value,
     });
   };
-  handleBodyType = () => {
+  handleBodyTypeOpen = () => {
     this.setState(
       (prevState) => ({
         bodyTypeOpen: !prevState.bodyTypeOpen,
@@ -33,7 +59,7 @@ class BuyItNow extends Component {
       }
     );
   };
-  handleCountry = () => {
+  handleCountryOpen = () => {
     this.setState(
       (prevState) => ({
         countryOpen: !prevState.countryOpen,
@@ -43,7 +69,7 @@ class BuyItNow extends Component {
       }
     );
   };
-  handleCity = () => {
+  handleCityOpen = () => {
     this.setState(
       (prevState) => ({
         cityOpen: !prevState.cityOpen,
@@ -53,7 +79,7 @@ class BuyItNow extends Component {
       }
     );
   };
-  handleMake = () => {
+  handleMakeOpen = () => {
     this.setState(
       (prevState) => ({
         makeOpen: !prevState.makeOpen,
@@ -63,7 +89,7 @@ class BuyItNow extends Component {
       }
     );
   };
-  handleModel = () => {
+  handleModelOpen = () => {
     this.setState(
       (prevState) => ({
         modelOpen: !prevState.modelOpen,
@@ -73,7 +99,7 @@ class BuyItNow extends Component {
       }
     );
   };
-  handleYear = () => {
+  handleYearOpen = () => {
     this.setState(
       (prevState) => ({
         yearOpen: !prevState.yearOpen,
@@ -83,7 +109,7 @@ class BuyItNow extends Component {
       }
     );
   };
-  handlePrice = () => {
+  handlePriceOpen = () => {
     this.setState(
       (prevState) => ({
         priceOpen: !prevState.priceOpen,
@@ -92,6 +118,107 @@ class BuyItNow extends Component {
         console.log(this.state.priceOpen);
       }
     );
+  };
+
+  bodyTypeChangeHandler = (event) => {
+    if (event.target.checked) {
+      this.setState((prevState) => ({
+        bodyType: prevState.bodyType.concat(event.target.name),
+      }));
+    } else {
+      this.setState((prevState) => ({
+        bodyType: prevState.bodyType.filter(
+          (item) => item !== event.target.name
+        ),
+      }));
+    }
+  };
+
+  countryChangeHandler = (event) => {
+    if (event.target.checked) {
+      this.setState(
+        (prevState) => ({
+          country: prevState.country.concat(event.target.name),
+        }),
+        () => console.log(this.state.country)
+      );
+    } else {
+      this.setState((prevState) => ({
+        country: prevState.country.filter((item) => item !== event.target.name),
+      }));
+    }
+  };
+
+  makeChangeHandler = (event) => {
+    if (event.target.checked) {
+      this.setState(
+        (prevState) => ({
+          make: prevState.make.concat(event.target.name),
+        }),
+        () => console.log(this.state.make)
+      );
+    } else {
+      this.setState((prevState) => ({
+        make: prevState.make.filter((item) => item !== event.target.name),
+      }));
+    }
+  };
+
+  modelChangeHandler = (event) => {
+    if (event.target.checked) {
+      this.setState(
+        (prevState) => ({
+          model: prevState.model.concat(event.target.name),
+        }),
+        () => console.log(this.state.model)
+      );
+    } else {
+      this.setState((prevState) => ({
+        model: prevState.model.filter((item) => item !== event.target.name),
+      }));
+    }
+  };
+
+  setPageNumber = (page) => {
+    this.setState(
+      (prevState) => {
+        return {
+          ...prevState,
+          page: page,
+        };
+      },
+      () => {
+        axios
+          .get('http://localhost:5000/car/getcars/', {
+            params: {
+              page: this.state.page,
+              limit: this.state.limit,
+            },
+          })
+          .then((res) => this.setState({ vehicles: res.data.vehicles }))
+          .catch((err) => console.log(err));
+      }
+    );
+  };
+
+  onFilterClickHandler = (event) => {
+    event.preventDefault();
+    const filterData = {
+      make: this.state.make ? this.state.make : '',
+      model: this.state.model ? this.state.model : '',
+    };
+    Object.keys(filterData).forEach(
+      (key) => filterData[key] === '' && delete filterData[key]
+    );
+    axios
+      .post('http://localhost:5000/car/filtercars/', filterData, {
+        params: {
+          page: this.state.page,
+          limit: this.state.limit,
+        },
+      })
+      .then((res) => this.setState({ vehicles: res.data.vehicles }))
+      .catch((err) => console.log(err));
   };
 
   onClickHandler = () => {
@@ -124,7 +251,7 @@ class BuyItNow extends Component {
                   data-target='#body-type'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleBodyType}
+                  onClick={this.handleBodyTypeOpen}
                 >
                   <strong>
                     Body Type{' '}
@@ -148,6 +275,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Hatchback'
+                      name='Hatchback'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='Hatchback'>
                       Hatchback
@@ -163,6 +292,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Sedan'
+                      name='Sedan'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='Sedan'>
                       Sedan
@@ -178,6 +309,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='SUV'
+                      name='SUV'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='SUV'>
                       SUV
@@ -194,6 +327,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='MPV'
+                      name='MPV'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='MPV'>
                       MPV
@@ -210,6 +345,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Jeep'
+                      name='Jeep'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='Jeep'>
                       Jeep
@@ -225,6 +362,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Truck'
+                      name='Truck'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='Truck'>
                       Truck
@@ -240,6 +379,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Bus'
+                      name='Bus'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='Bus'>
                       Bus
@@ -258,7 +399,7 @@ class BuyItNow extends Component {
                   data-target='#country'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleCountry}
+                  onClick={this.handleCountryOpen}
                 >
                   <strong>
                     Country{' '}
@@ -283,6 +424,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='United States'
+                      name='United States'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='United States'>
                       United States
@@ -298,6 +441,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='United Kingdom'
+                      name='United Kingdom'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='United Kingdom'>
                       United Kingdom
@@ -313,6 +458,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Australia'
+                      name='Australia'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='Australia'>
                       Australia
@@ -329,6 +476,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Japan'
+                      name='Japan'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='Japan'>
                       Japan
@@ -345,6 +494,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Pakistan'
+                      name='Pakistan'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='Pakistan'>
                       Pakistan
@@ -363,7 +514,7 @@ class BuyItNow extends Component {
                   data-target='#city'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleCity}
+                  onClick={this.handleCityOpen}
                 >
                   <strong>
                     City{' '}
@@ -469,7 +620,7 @@ class BuyItNow extends Component {
                   data-target='#make'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleMake}
+                  onClick={this.handleMakeOpen}
                 >
                   <strong>
                     Make{' '}
@@ -494,6 +645,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Toyota'
+                      name='Toyota'
+                      onChange={this.makeChangeHandler}
                     />
                     <label class='custom-control-label' for='Toyota'>
                       Toyota
@@ -576,7 +729,7 @@ class BuyItNow extends Component {
                   data-target='#model'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleModel}
+                  onClick={this.handleModelOpen}
                 >
                   <strong>
                     Model{' '}
@@ -601,6 +754,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Corolla'
+                      name='Corolla'
+                      onChange={this.modelChangeHandler}
                     />
                     <label class='custom-control-label' for='Corolla'>
                       Corolla
@@ -616,6 +771,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Yaris'
+                      name='Yaris'
+                      onChange={this.modelChangeHandler}
                     />
                     <label class='custom-control-label' for='Yaris'>
                       Yaris
@@ -631,6 +788,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Fortuner'
+                      name='Corolla'
+                      onChange={this.modelChangeHandler}
                     />
                     <label class='custom-control-label' for='Fortuner'>
                       Fortuner
@@ -681,7 +840,7 @@ class BuyItNow extends Component {
                   data-target='#year'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleYear}
+                  onClick={this.handleYearOpen}
                 >
                   <strong>
                     Year{' '}
@@ -756,7 +915,7 @@ class BuyItNow extends Component {
                   data-target='#price'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handlePrice}
+                  onClick={this.handlePriceOpen}
                 >
                   <strong>
                     Price{' '}
@@ -825,7 +984,10 @@ class BuyItNow extends Component {
 
         <div className={classes['large-devices-container']}>
           <div className={classes['search-container']}>
-            <form className={['text-left', classes['form']].join(' ')}>
+            <form
+              className={['text-left', classes['form']].join(' ')}
+              onSubmit={this.onFilterClickHandler}
+            >
               <div
                 className={['form-group', classes['form-element']].join(' ')}
               >
@@ -836,7 +998,7 @@ class BuyItNow extends Component {
                   data-target='#body-type'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleBodyType}
+                  onClick={this.handleBodyTypeOpen}
                 >
                   <strong>
                     Body Type{' '}
@@ -860,6 +1022,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Hatchback'
+                      name='Hatchback'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='Hatchback'>
                       Hatchback
@@ -875,6 +1039,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Sedan'
+                      name='Sedan'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='Sedan'>
                       Sedan
@@ -890,6 +1056,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='SUV'
+                      name='SUV'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='SUV'>
                       SUV
@@ -906,6 +1074,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='MPV'
+                      name='MPV'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='MPV'>
                       MPV
@@ -921,6 +1091,8 @@ class BuyItNow extends Component {
                     <input
                       type='checkbox'
                       class='custom-control-input'
+                      name='Jeep'
+                      onChange={this.bodyTypeChangeHandler}
                       id='Jeep'
                     />
                     <label class='custom-control-label' for='Jeep'>
@@ -937,6 +1109,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Truck'
+                      name='Truck'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='Truck'>
                       Truck
@@ -952,6 +1126,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Bus'
+                      name='Bus'
+                      onChange={this.bodyTypeChangeHandler}
                     />
                     <label class='custom-control-label' for='Bus'>
                       Bus
@@ -970,7 +1146,7 @@ class BuyItNow extends Component {
                   data-target='#country'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleCountry}
+                  onClick={this.handleCountryOpen}
                 >
                   <strong>
                     Country{' '}
@@ -995,6 +1171,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='United States'
+                      name='United States'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='United States'>
                       United States
@@ -1010,6 +1188,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='United Kingdom'
+                      name='United Kingdom'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='United Kingdom'>
                       United Kingdom
@@ -1025,6 +1205,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Australia'
+                      name='Australia'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='Australia'>
                       Australia
@@ -1041,6 +1223,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Japan'
+                      name='Japan'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='Japan'>
                       Japan
@@ -1057,6 +1241,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Pakistan'
+                      name='Pakistan'
+                      onChange={this.countryChangeHandler}
                     />
                     <label class='custom-control-label' for='Pakistan'>
                       Pakistan
@@ -1075,7 +1261,7 @@ class BuyItNow extends Component {
                   data-target='#city'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleCity}
+                  onClick={this.handleCityOpen}
                 >
                   <strong>
                     City{' '}
@@ -1181,7 +1367,7 @@ class BuyItNow extends Component {
                   data-target='#make'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleMake}
+                  onClick={this.handleMakeOpen}
                 >
                   <strong>
                     Make{' '}
@@ -1206,6 +1392,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Toyota'
+                      name='Toyota'
+                      onChange={this.makeChangeHandler}
                     />
                     <label class='custom-control-label' for='Toyota'>
                       Toyota
@@ -1222,6 +1410,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Honda'
+                      name='Honda'
+                      onChange={this.makeChangeHandler}
                     />
                     <label class='custom-control-label' for='Honda'>
                       Honda
@@ -1238,6 +1428,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Suzuki'
+                      name='Suzuki'
+                      onChange={this.makeChangeHandler}
                     />
                     <label class='custom-control-label' for='Suzuki'>
                       Suzuki
@@ -1254,6 +1446,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Volkswagen'
+                      name='Volkswagen'
+                      onChange={this.makeChangeHandler}
                     />
                     <label class='custom-control-label' for='Volkswagen'>
                       Volkswagen
@@ -1270,6 +1464,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Mercedes'
+                      name='Mercedes'
+                      onChange={this.makeChangeHandler}
                     />
                     <label class='custom-control-label' for='Mercedes'>
                       Mercedes
@@ -1288,7 +1484,7 @@ class BuyItNow extends Component {
                   data-target='#model'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleModel}
+                  onClick={this.handleModelOpen}
                 >
                   <strong>
                     Model{' '}
@@ -1313,6 +1509,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Corolla'
+                      name='Corolla'
+                      onChange={this.modelChangeHandler}
                     />
                     <label class='custom-control-label' for='Corolla'>
                       Corolla
@@ -1328,6 +1526,8 @@ class BuyItNow extends Component {
                       type='checkbox'
                       class='custom-control-input'
                       id='Yaris'
+                      name='Yaris'
+                      onChange={this.modelChangeHandler}
                     />
                     <label class='custom-control-label' for='Yaris'>
                       Yaris
@@ -1393,7 +1593,7 @@ class BuyItNow extends Component {
                   data-target='#year'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handleYear}
+                  onClick={this.handleYearOpen}
                 >
                   <strong>
                     Year{' '}
@@ -1407,54 +1607,33 @@ class BuyItNow extends Component {
                   </strong>
                 </button>
 
-                <div class='collapse' id='year'>
-                  <select class='custom-select my-2 mx-2'>
-                    <option selected>From</option>
-                    <option value='1'>2020</option>
-                    <option value='2'>2019</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                  </select>
+                <div
+                  className='collapse'
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
+                  id='year'
+                >
+                  <Datetime
+                    value=''
+                    dateFormat='YYYY'
+                    timeFormat={false}
+                    // inputProps={{ className: classes['date-time'] }}
 
-                  <select className='custom-select mx-2'>
-                    <option selected>To</option>
-                    <option value='1'>2020</option>
-                    <option value='2'>2019</option>
-                    <option value='2'>2019</option>
-                    <option value='2'>2019</option>
-                    <option value='2'>2019</option>
-                    <option value='2'>2019</option>
-                    <option value='2'>2019</option>
-                    <option value='2'>2019</option>
-                    <option value='3'>2018</option>
+                    // isValidDate={this.disableFutureDt}
+                    // onChange={this.onYearChangeHandler}
+                  />
 
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                    <option value='3'>2018</option>
-                  </select>
+                  <Datetime
+                    value=''
+                    dateFormat='YYYY'
+                    timeFormat={false}
+                    // inputProps={{ className: classes['date-time'] }}
+                    // isValidDate={this.disableFutureDt}
+                    // onChange={this.onYearChangeHandler}
+                  />
                 </div>
               </div>
 
@@ -1468,7 +1647,7 @@ class BuyItNow extends Component {
                   data-target='#price'
                   aria-expanded='false'
                   aria-controls='collapseExample'
-                  onClick={this.handlePrice}
+                  onClick={this.handlePriceOpen}
                 >
                   <strong>
                     Price{' '}
@@ -1537,910 +1716,63 @@ class BuyItNow extends Component {
           </div>
 
           <div className={classes['car-container']}>
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
+            {this.state.vehicles ? (
+              this.state.vehicles.map((vehicle) => (
+                <CarCard vehicle={vehicle} />
+              ))
+            ) : (
+              <div
+                className='spinner-border'
+                style={{ margin: 'auto', width: '7rem', height: '7rem' }}
+                role='status'
+              >
+                <span className='sr-only'>Loading...</span>
               </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
-            <div className={[classes['container'], 'card'].join(' ')}>
-              <img
-                className={[classes['car-image'], 'card-img-top'].join(' ')}
-                src={
-                  Math.floor(Math.random() * 2) === 1
-                    ? 'https://cdn.pixabay.com/photo/2019/08/04/23/28/honda-4384888_1280.jpg'
-                    : 'https://cdn.pixabay.com/photo/2014/07/04/13/41/auto-383897_1280.jpg'
-                }
-                alt=''
-              />
-              <div className='card-body'>
-                <h5 className={['card-title', classes['title']].join(' ')}>
-                  Honda Civic 2009
-                </h5>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  114,000km
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Karachi, Pakistan
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Bill of Sale
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Run and Drive
-                </p>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Auction in <strong>2h 30m 40s</strong>
-                </p>
-                <br></br>
-                <p className={['card-text', classes['text']].join(' ')}>
-                  Pre Auction charges:{' '}
-                  <span style={{ color: '#1874CD' }}>
-                    <strong>$50</strong>
-                  </span>
-                </p>
-                <a href='#' className={classes['btn']}>
-                  Participate Now!
-                </a>
-              </div>
-            </div>
+            )}
           </div>
         </div>
         <nav aria-label='...' className='my-5'>
           <ul className='pagination justify-content-center'>
-            <li class='page-item disabled'>
-              <a class='page-link' href='#' tabindex='-1'>
+            <li
+              className={`page-item ${this.state.page === 1 ? 'disabled' : ''}`}
+            >
+              <button
+                className='page-link'
+                tabindex='-1'
+                onClick={() => this.setPageNumber(this.state.page - 1)}
+              >
                 Previous
-              </a>
+              </button>
             </li>
-            <li class='page-item'>
-              <a class='page-link' href='#'>
-                1
-              </a>
+            <li className='page-item active'>
+              <button className='page-link'>
+                <span className='sr-only'>(current)</span>
+                {this.state.page}
+              </button>
             </li>
-            <li class='page-item active'>
-              <a class='page-link' href='#'>
-                2 <span class='sr-only'>(current)</span>
-              </a>
+            <li className='page-item'>
+              <button
+                className='page-link'
+                onClick={() => this.setPageNumber(this.state.page + 1)}
+              >
+                {this.state.page + 1}
+              </button>
             </li>
-            <li class='page-item'>
-              <a class='page-link' href='#'>
-                3
-              </a>
+            <li className='page-item'>
+              <button
+                className='page-link'
+                onClick={() => this.setPageNumber(this.state.page + 2)}
+              >
+                {this.state.page + 2}
+              </button>
             </li>
-            <li class='page-item'>
-              <a class='page-link' href='#'>
+            <li className='page-item'>
+              <button
+                className='page-link'
+                onClick={() => this.setPageNumber(this.state.page + 1)}
+              >
                 Next
-              </a>
+              </button>
             </li>
           </ul>
         </nav>
