@@ -54,11 +54,23 @@ const Header = (props) => {
                     className='dropdown-menu'
                     aria-labelledby='navbarDropdownMenuLink'
                   >
-                    <a className='dropdown-item' href='#'>
-                      Dashboard
-                    </a>
                     <Link className='dropdown-item' to='/addcar'>
-                      Add Car Ad
+                      Feature Car
+                    </Link>
+                    <Link className='dropdown-item' to='/addcar'>
+                      Manage Cars
+                    </Link>
+                    <Link className='dropdown-item' to='/createthread'>
+                      Create Thread
+                    </Link>
+                    <Link className='dropdown-item' to='/addcar'>
+                      Manage Threads
+                    </Link>
+                    <Link className='dropdown-item' to='/addcar'>
+                      Create Blog
+                    </Link>
+                    <Link className='dropdown-item' to='/addcar'>
+                      Manage Blog
                     </Link>
                     <Link
                       className='dropdown-item'

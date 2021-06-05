@@ -52,16 +52,13 @@ exports.getVehicles = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
 
   try {
-    // execute query with page and limit values
     const vehicles = await Vehicle.find()
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();
 
-    // get total documents in the Posts collection
     const count = await Vehicle.countDocuments();
-    console.log(vehicles);
-    // return response with posts, total pages, and current page
+    // console.log(vehicles);
     res.status(200).json({
       vehicles,
       totalPages: Math.ceil(count / limit),
@@ -79,7 +76,6 @@ exports.filterVehicles = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
 
   try {
-    // execute query with page and limit values
     const vehicles = await Vehicle.find({
       $or: [
         { make: { $in: req.body.make } },
@@ -90,10 +86,8 @@ exports.filterVehicles = async (req, res, next) => {
       .skip((page - 1) * limit)
       .exec();
 
-    // get total documents in the Posts collection
     const count = await Vehicle.countDocuments();
     console.log(vehicles);
-    // return response with posts, total pages, and current page
     res.status(200).json({
       vehicles,
       totalPages: Math.ceil(count / limit),

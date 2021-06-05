@@ -11,6 +11,7 @@ class CarCard extends Component {
     minutes: '',
     seconds: '',
     intervalId: '',
+    complete: false,
   };
 
   render() {
@@ -40,7 +41,9 @@ class CarCard extends Component {
               this.props.vehicle.year}
           </h5>
           <p className={['card-text', classes['text']].join(' ')}>
-            {this.props.vehicle.mileage + ' km'}
+            {this.props.vehicle.mileage
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' km'}
           </p>
           <p className={['card-text', classes['text']].join(' ')}>
             Karachi, Pakistan
@@ -54,7 +57,15 @@ class CarCard extends Component {
           <p className={['card-text', classes['text']].join(' ')}>
             Auction in{' '}
             <strong>
-              <Countdown date={new Date(this.props.vehicle.auctionTime)} />
+              {new Date(this.props.vehicle.auctionTime) < Date.now() ||
+              this.state.complete ? (
+                ' Progress'
+              ) : (
+                <Countdown
+                  date={new Date(this.props.vehicle.auctionTime)}
+                  onComplete={() => this.setState({ complete: true })}
+                />
+              )}
             </strong>
           </p>
           <br></br>

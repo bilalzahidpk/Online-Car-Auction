@@ -83,12 +83,18 @@ const Navigation = () => {
               </div>
             </li>
             <li className='nav-item'>
-              <Link className={[classes['nav'], 'nav-link'].join(' ')} to='/'>
+              <Link
+                className={[classes['nav'], 'nav-link'].join(' ')}
+                to='/trends'
+              >
                 Trends
               </Link>
             </li>
             <li className='nav-item'>
-              <Link className={[classes['nav'], 'nav-link'].join(' ')} to='/'>
+              <Link
+                className={[classes['nav'], 'nav-link'].join(' ')}
+                to='/forums'
+              >
                 Forums
               </Link>
             </li>

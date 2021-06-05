@@ -9,6 +9,9 @@ import AddCar from './containers/Form/AddCar/AddCar';
 import SignUp from './containers/Form/SignUp/SignUp';
 import SignIn from './containers/Form/SignIn/SignIn';
 import Layout from './hoc/Layout/Layout';
+import Trends from './containers/Trends/Trends';
+import Forums from './containers/Forums/Forum/Forum';
+import CreateThread from './containers/Forums/CreateThread/CreateThread';
 import CarDetail from './components/CarDetail/CarDetail';
 import { useSelector } from 'react-redux';
 
@@ -22,8 +25,10 @@ function App() {
       <Route path='/ourfee' component={OurFee} />
       <Route path='/faq' component={FAQ} />
       <Route path='/signup' component={SignUp} />
+      <Route path='/forums' component={Forums} />
       <Route path='/signin' component={SignIn} />
       <Route path='/cardetail/:id' component={CarDetail} />
+      <Route path='/trends' component={Trends} />
       <Route path='/' exact component={Home} />
       <Redirect to='/' exact component={Home} />
     </Switch>
@@ -37,7 +42,10 @@ function App() {
         <Route path='/ourfee' component={OurFee} />
         <Route path='/faq' component={FAQ} />
         <Route path='/addcar' component={AddCar} />
-        <Route path='/cardetail' component={CarDetail} />
+        <Route path='/forums' component={Forums} />
+        <Route path='/createthread' component={CreateThread} />
+        <Route path='/cardetail/:id' component={CarDetail} />
+        <Route path='/trends' component={Trends} />
         <Route path='/' exact component={Home} />
         <Redirect to='/' exact component={Home} />
       </Switch>

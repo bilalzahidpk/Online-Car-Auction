@@ -3,6 +3,48 @@
   padding-bottom: 5rem;
   height: 100%;
   margin-top: 0%;
+  width: 100vw;
+}
+
+.alert-container {
+  display: flex;
+  width: 100vw;
+  justify-content: center;
+  text-align: center;
+  position: fixed;
+  top: 25px;
+  font-weight: 800;
+  z-index: 1000;
+  left: 0;
+}
+
+.thumbsup-icon {
+  margin-bottom: 0.6rem;
+}
+
+.win {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.button {
+  font-weight: bold !important;
+}
+
+.auction-button-container {
+  width: 100vw;
+  display: none;
+  display: flex;
+  justify-content: space-between;
+  height: max-content;
+  background: white;
+  padding: 2rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 12;
 }
 
 .nav-links {
@@ -17,13 +59,26 @@
 
 .topContainer {
   display: flex;
+  flex-direction: column;
   /* background-color: whitesmoke; */
   flex-wrap: wrap;
   margin-left: 2rem;
   /* align-items: center; */
   /* justify-content: center; */
 }
-
+.display-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 45%;
+  /* height: 50%; */
+}
+.vehicle-intro {
+  display: flex;
+  width: 100vw;
+  justify-content: space-between;
+}
 .sliderContainer {
   flex: 35 35;
   padding: 1rem;
@@ -48,8 +103,11 @@
 }
 
 .top-buttons {
-  flex: 33 33;
-  padding: 0.5rem;
+  display: flex;
+  width: 100vw;
+  padding: 1rem;
+  justify-content: center;
+  padding-top: 3rem;
 }
 
 .all-details {
@@ -68,6 +126,7 @@
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
   background-color: #ff5454 !important;
+  margin-right: 2rem;
   border-color: #ff5454;
   /* font-weight: 600; */
 }
@@ -91,6 +150,7 @@
   border-radius: 1rem;
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
+  margin-left: 2rem;
 }
 
 .optionsContainer {
@@ -123,6 +183,9 @@
 
 .sellers-comments {
   width: 47%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   text-align: justify;
 }
 .car-details-conatiner {
@@ -235,7 +298,7 @@
   line-height: 40px;
 }
 
-svg {
+/* svg {
   position: absolute;
   top: 0;
   right: 0;
@@ -252,7 +315,7 @@ svg circle {
   stroke: white;
   fill: none;
   animation: countdown 10s linear infinite forwards;
-}
+} */
 
 @keyframes countdown {
   from {
@@ -261,4 +324,86 @@ svg circle {
   to {
     stroke-dashoffset: 113px;
   }
+}
+@media (max-width: 1150px) {
+  .vehicle-intro {
+    flex-direction: column;
+  }
+  .carousel {
+    width: 80% !important;
+    margin: auto;
+  }
+  .display-container {
+    width: 100%;
+
+    /* height: 50%; */
+  }
+  .display-container > div {
+    margin-bottom: 1rem;
+  }
+  .vehicleName {
+    text-align: center;
+    /* margin: auto; */
+  }
+  .top-buttons {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 700px) {
+  .display-container {
+    width: 100%;
+    align-items: center;
+    /* height: 50%; */
+  }
+  .top-buttons {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0;
+  }
+  .top-buttons > button {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 610px) {
+  .auction-button-container {
+    width: 100vw;
+    display: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+    height: max-content;
+    background: white;
+    padding: 2rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 12;
+  }
+  .bid-button {
+    margin-bottom: 1.5rem;
+  }
+  .bid-button:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.bid-button {
+  color: black !important;
+  background: orange !important;
+  padding: inherit;
+  font-weight: 800;
+  padding: 1rem 4rem;
+  border: inherit;
+  border-radius: 8px;
+}
+.bid-button:hover {
+  color: orange !important;
+  background: black !important;
 }

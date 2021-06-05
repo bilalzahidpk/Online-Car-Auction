@@ -9,38 +9,198 @@ import damage from './damageIcon.PNG';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import Countdown from 'react-countdown';
+import io from 'socket.io-client';
+import { Modal, Button, ThemeProvider, Alert } from 'react-bootstrap';
+import { Bar } from 'react-chartjs-2';
+import data from '../../assets/Car_sales.csv';
+import { connect } from 'react-redux';
+import * as d3 from 'd3';
 
-import pic1 from './1.jpg';
-import pic2 from './2.jpg';
-import pic3 from './3.jpg';
+// import pic1 from './1.jpg';
+// import pic2 from './2.jpg';
+// import pic3 from './3.jpg';
 import MakeAnOffer from './MakeAnOffer.PNG';
 import axios from 'axios';
+import { timer } from 'd3';
+
+let socket;
+var countDownTime = 0;
 
 class CarDetail extends Component {
+  constructor(props) {
+    super(props);
+
+    // Create the ref
+    this.exampleRef = React.createRef(null);
+    this.dateRef = React.createRef(null);
+  }
+
   state = {
     key: 0,
+    showModal: '',
+    showAlert: '',
+    message: '',
+    showButtons: false,
+    currentBid: 0,
+    time: 10,
+    startAuction: false,
   };
 
-  onResetHandler = () => {
-    this.setState((prevState) => ({
-      key: prevState.key + 1,
-    }));
-    setTimeout(() => console.log('Hello'), 10000);
+  joinAuction = () => {
+    socket.emit(
+      'join',
+      {
+        name: this.props?.user?.name,
+        room: this.props.location?.vehicle?.vin,
+      },
+      (err) => {
+        if (err) {
+          this.setState({ message: err, showAlert: true }, () => {
+            setTimeout(() => {
+              this.setState({ showAlert: false });
+            }, 2000);
+          });
+        }
+      }
+    );
+
+    socket.on('messageUserJoined', ({ message }) => {
+      console.log(message);
+      this.setState({ message: message, showAlert: true }, () => {
+        setTimeout(() => {
+          this.setState({ showAlert: false });
+        }, 2000);
+      });
+    });
   };
 
-  componentDidMount() {
-    if (!this.props.location.vehicle) {
-      // axios.get()
-    }
+  checkWinAuction = () => {
+    console.log('You');
+    socket.on('informWinner', ({ message }) => {
+      this.setState({ showModal: true, message: message });
+    });
+  };
 
-    // else {
-    //   this.
+  startAuction = () => {
+    this.dateRef = Date.now() + 10000;
+    console.log(this.dateRef);
+    this.setState({ showButtons: true, startAuction: true });
+  };
+
+  placeBid = (event) => {
+    socket.emit('placeBid', { bid: parseInt(event.target.value) });
+    socket.on('bidSuccessful', ({ message }) => {
+      this.setState({ message: message, showAlert: true });
+    });
+    socket.emit('refreshTime', {});
+    socket.on('updateTime', () => {
+      console.log('hello');
+      this.dateRef = Date.now() + 10000;
+      this.setState((prevState) => ({ key: prevState.key + 1 }));
+    });
+  };
+  async componentDidMount() {
+    // if (!this.props.location.vehicle) {
+    //   axios.get('')
     // }
+
+    socket = io('localhost:5000');
+
+    try {
+      const response = await d3.csv(data);
+      this.setState({ data: response });
+      let sales = this.state.data
+        .slice(0, this.state.data.length)
+        .map((item) => parseInt(item['Sales_in_thousands']));
+      let carNames = this.state.data
+        .slice(0, this.state.data.length)
+        .map((item) => item['Manufacturer'] + ' ' + item['Model']);
+      console.log(carNames);
+      let display2 = {
+        labels: carNames,
+        datasets: [
+          {
+            label: 'Car Sales by Model',
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            data: sales,
+          },
+        ],
+      };
+
+      this.setState({ response: display2 }, () =>
+        console.log(this.state.response)
+      );
+    } catch (err) {
+      throw err;
+    }
   }
+
+  finishAuction = () => {
+    socket.emit('auctionFinished', { room: this.props.location.vehicle.vin });
+    this.setState({ showAlert: false });
+    this.checkWinAuction();
+  };
+  componentWillUnmount() {
+    socket.disconnect();
+  }
+  onModalOpen = () => {
+    this.setState({ showModal: true });
+  };
+
+  onModalClose = () => {
+    this.setState({ showModal: false });
+  };
 
   render() {
     return (
       <div className={classes['main-container']}>
+        {this.state.showModal ? (
+          <Modal
+            show={this.state.showModal}
+            onHide={this.onModalClose}
+            centered
+          >
+            <Modal.Body style={{ textAlign: 'center' }}>
+              <span className={classes['win']}>
+                <i
+                  className={[
+                    'fas fa-thumbs-up fa-3x',
+                    classes['thumbsup-icon'],
+                  ].join(' ')}
+                ></i>
+                <strong>{this.state.message}</strong>
+              </span>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant='success'
+                className={classes['button']}
+                onClick={this.onModalClose}
+              >
+                Proceed to Buy Car
+              </Button>
+              <Button
+                variant='danger'
+                className={classes['button']}
+                onClick={this.onModalClose}
+              >
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        ) : null}
+        {this.state.showAlert ? (
+          <div className={classes['alert-container']}>
+            {' '}
+            <Alert variant='info'>{this.state.message}</Alert>
+          </div>
+        ) : null}
+
         <div className={classes['nav-links']}>
           <a href='#' className={classes['auctions']}>
             Auctions
@@ -59,104 +219,144 @@ class CarDetail extends Component {
                     <li class="breadcrumb-item active" aria-current="page">Honda Pilot 2006 </li>
                 </ol>
             </nav> */}
-
         <div className={classes['topContainer']}>
-          <div className={classes['sliderContainer']}>
-            <Carousel autoPlay interval='1000' transitionTime='1000'>
-              {this.props.location.vehicle.imageUrl.map((image) => (
-                <img src={image} />
-              ))}
-            </Carousel>
-          </div>
-          <div className={classes['details-container']}>
-            <h1 className={classes['vehicleName']}>
-              {`${this.props.location.vehicle.make} ${this.props.location.vehicle.model} ${this.props.location.vehicle.year}`}{' '}
-            </h1>
-            <p className={classes['pre-bid']}>
-              Current Pre-bid: {this.props.location.vehicle.preBidPrice + '$'}
-            </p>
-            <div className={classes['nested-flex']}>
-              <div className={classes['top-buttons']}>
-                <button
-                  type='button'
-                  onClick={this.onResetHandler}
-                  className={[
-                    'btn btn-warning',
-                    classes['auction-button'],
-                  ].join(' ')}
-                >
-                  Attend This Auction
-                </button>
-                <br />
-                <br />
-                <button
-                  type='button'
-                  className={['btn btn-info', classes['BuyNow-button']].join(
-                    ' '
+          <h1 className={classes['vehicleName']}>
+            {`${this.props.location.vehicle.make} ${this.props.location.vehicle.model} ${this.props.location.vehicle.year}`}{' '}
+          </h1>
+
+          <div className={classes['vehicle-intro']}>
+            <div style={{ width: '50%' }} className={classes['carousel']}>
+              <Carousel autoPlay interval='1000' transitionTime='1000'>
+                {this.props.location.vehicle.imageUrl.map((image) => (
+                  <img src={image} />
+                ))}
+              </Carousel>
+            </div>
+            <div className={classes['display-container']}>
+              <div
+                style={{
+                  background: 'white',
+                  padding: '1rem',
+                  height: 'max-content',
+                  color: '#555A60',
+                  width: '70%',
+                }}
+              >
+                <h4>
+                  {new Date(this.props.location.vehicle.auctionTime) <
+                  Date.now() ? (
+                    <center>
+                      <strong>Auction in Progress</strong>
+                    </center>
+                  ) : (
+                    <strong>
+                      Time Remaining: &nbsp;
+                      <Countdown
+                        date={new Date(this.props.location.vehicle.auctionTime)}
+                        onComplete={this.startAuction}
+                      />
+                    </strong>
                   )}
-                >
-                  Buy Now
-                </button>
-                <br />
-                <br />
-                <button
-                  type='button'
-                  className={[
-                    'btn btn-light',
-                    classes['WatchList-button'],
-                  ].join(' ')}
-                >
-                  Add to Watch List
-                </button>
+                </h4>
+              </div>
+              <div
+                style={{
+                  background: 'white',
+                  padding: '1rem',
+                  color: '#555A60',
+                  width: '70%',
+                }}
+              >
+                <h4>
+                  {' '}
+                  <strong>
+                    Current Pre-bid:{' '}
+                    {this.props.location.vehicle.preBidPrice + '$'}
+                  </strong>
+                </h4>
+              </div>
+              <div
+                style={{
+                  background: 'white',
+                  padding: '1rem',
+                  height: 'max-content',
+                  color: '#555A60',
+                  width: '70%',
+                }}
+              >
+                <p>
+                  <strong>
+                    View the Terms &amp; Conditions before participating in the
+                    auction.
+                  </strong>
+                </p>
               </div>
 
-              <div className={classes['all-details']}>
+              <div
+                style={{
+                  background: 'white',
+                  padding: '1rem',
+                  height: 'max-content',
+                  color: '#555A60',
+                  width: '70%',
+                }}
+              >
                 <p>
-                  <img src={Title} className={classes['title-icon']} />
-                  Title
-                  <br />
-                  GA - Bill of sale - parts only
+                  <strong>
+                    In case of any problem, Kindly contact our represenative
+                    using the contact number given below.
+                  </strong>
                 </p>
+              </div>
+
+              <div
+                style={{
+                  background: 'white',
+                  padding: '1rem',
+                  height: 'max-content',
+                  color: '#555A60',
+                  width: '70%',
+                }}
+              >
                 <p>
-                  <img src={statusIcon} className={classes['status-icon']} />
-                  Status
-                  <br />
-                  Run and Drive
-                </p>
-                <p>
-                  <img src={damage} className={classes['damage-icon']} />
-                  Damage
-                  <br />
-                  Normal Wear
-                </p>
-                <p>
-                  <img src={Title} className={classes['title-icon']} />
-                  Mileage
-                  <br />
-                  {this.props.location.vehicle.mileage + ' km'} (Actual)
-                </p>
-                <p>
-                  <img src={Title} className={classes['title-icon']} />
-                  Location
-                  <br />
-                  York haven, PA
+                  <strong>
+                    Violation of Fair Usage Policy results in expulsion.
+                    Punishments are mentioned in the Q/A section.
+                  </strong>
                 </p>
               </div>
             </div>
           </div>
         </div>
-        <CountdownCircleTimer
-          key={this.state.key}
-          isPlaying
-          duration={10}
-          colors={[
-            ['#004777', 0.33],
-            ['#F7B801', 0.33],
-            ['#A30000', 0.33],
-          ]}
-        >
-          {({ remainingTime }) => remainingTime}
-        </CountdownCircleTimer>
+        <div className={classes['top-buttons']}>
+          <button
+            type='button'
+            onClick={() => {
+              this.joinAuction();
+              this.startAuction();
+            }}
+            className={['btn btn-warning', classes['auction-button']].join(' ')}
+          >
+            Attend This Auction
+          </button>
+          <br />
+          <br />
+          <button
+            type='button'
+            className={['btn btn-info', classes['BuyNow-button']].join(' ')}
+          >
+            Buy Now
+          </button>
+          <br />
+          <br />
+          <button
+            type='button'
+            className={['btn btn-light', classes['WatchList-button']].join(' ')}
+          >
+            Add to Watch List
+          </button>
+        </div>
+
         <div className={classes['optionsContainer']}>
           <div className={classes['make-an-offer']}>
             <a>
@@ -188,13 +388,52 @@ class CarDetail extends Component {
             </a>
           </div>
         </div>
-
+        <div
+          style={{
+            width: '100vw',
+            position: 'fixed',
+            zIndex: '9999',
+            top: '0',
+            lefft: '0',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          <strong>
+            {this.state.startAuction ? (
+              // <CountdownCircleTimer
+              //   key={this.state.key}
+              //   isPlaying={this.state.startAuction}
+              //   isPlaying={true}
+              //   duration={10}
+              //   colors={[
+              //     ['#004777', 0.33],
+              //     ['#A30000', 0.33],
+              //   ]}
+              //   onComplete={this.finishAuction}
+              // >
+              //   {({ remainingTime }) => remainingTime}
+              // </CountdownCircleTimer>
+              <Countdown
+                date={this.dateRef}
+                key={this.state.key}
+                onComplete={this.finishAuction}
+              />
+            ) : null}
+          </strong>
+        </div>
         <div className={classes['lower-container']}>
           <div className={classes['sellers-comments']}>
-            <h2 className={classes['sellers-comments__heading']}>
-              <strong>Seller's Comments</strong>
-            </h2>
-            <p>{this.props.location.vehicle.comments}</p>
+            <div>
+              {' '}
+              <h2 className={classes['sellers-comments__heading']}>
+                <strong>Seller's Comments</strong>
+              </h2>
+              <p>{this.props.location.vehicle.comments}</p>
+            </div>
+            {this.state.response ? (
+              <Bar data={this.state.response} options={{}} />
+            ) : null}
           </div>
           <div className={classes['car-details-conatiner']}>
             <div className={classes['car-details__item']}>
@@ -271,9 +510,45 @@ class CarDetail extends Component {
             </div>
           </div>
         </div>
+        {/* {this.state.showButtons ? (
+          <div className={classes['auction-button-container']}>
+            <button className={classes['bid-button']}>100$</button>
+            <button className={classes['bid-button']}>500$</button>
+            <button className={classes['bid-button']}>1000$</button>
+          </div>
+        ) : null} */}
+        <div className={classes['auction-button-container']}>
+          <button
+            className={classes['bid-button']}
+            value='100'
+            onClick={this.placeBid}
+          >
+            100$
+          </button>
+          <button
+            className={classes['bid-button']}
+            value='500'
+            onClick={this.placeBid}
+          >
+            500$
+          </button>
+          <button
+            className={classes['bid-button']}
+            value='1000'
+            onClick={this.placeBid}
+          >
+            1000$
+          </button>
+        </div>
       </div>
     );
   }
 }
 
-export default CarDetail;
+const mapStateToProps = (state) => {
+  return {
+    user: state.auth.user,
+  };
+};
+
+export default connect(mapStateToProps, null)(CarDetail);

@@ -4,6 +4,8 @@ import CarCard from '../../components/HomePage/CarCard/CarCard';
 import Datetime from 'react-datetime';
 import classes from './BuyItNow.module.css';
 import axios from 'axios';
+import { Modal, Button, ThemeProvider } from 'react-bootstrap';
+import { relativeTimeThreshold } from 'moment';
 
 class BuyItNow extends Component {
   state = {
@@ -28,6 +30,7 @@ class BuyItNow extends Component {
     vehicles: '',
     timeLeft: '',
     intervalId: '',
+    showModal: false,
   };
 
   componentDidMount() {
@@ -217,7 +220,13 @@ class BuyItNow extends Component {
           limit: this.state.limit,
         },
       })
-      .then((res) => this.setState({ vehicles: res.data.vehicles }))
+      .then((res) => {
+        if (res.data.vehicles.length === 0) {
+          this.onModalOpen();
+        } else {
+          this.setState({ vehicles: res.data.vehicles });
+        }
+      })
       .catch((err) => console.log(err));
   };
 
@@ -225,6 +234,14 @@ class BuyItNow extends Component {
     this.setState((prevState) => ({
       filter: !prevState.filter,
     }));
+  };
+
+  onModalOpen = () => {
+    this.setState({ showModal: true });
+  };
+
+  onModalClose = () => {
+    this.setState({ showModal: false });
   };
 
   render() {
@@ -264,7 +281,7 @@ class BuyItNow extends Component {
                     ></i>
                   </strong>
                 </button>
-                <div class='collapse' id='body-type'>
+                <div className='collapse' id='body-type'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -273,12 +290,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Hatchback'
                       name='Hatchback'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Hatchback'>
+                    <label className='custom-control-label' for='Hatchback'>
                       Hatchback
                     </label>
                   </div>
@@ -290,12 +307,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Sedan'
                       name='Sedan'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Sedan'>
+                    <label className='custom-control-label' for='Sedan'>
                       Sedan
                     </label>
                   </div>
@@ -307,12 +324,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='SUV'
                       name='SUV'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='SUV'>
+                    <label className='custom-control-label' for='SUV'>
                       SUV
                     </label>
                   </div>
@@ -325,12 +342,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='MPV'
                       name='MPV'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='MPV'>
+                    <label className='custom-control-label' for='MPV'>
                       MPV
                     </label>
                   </div>
@@ -343,12 +360,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Jeep'
                       name='Jeep'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Jeep'>
+                    <label className='custom-control-label' for='Jeep'>
                       Jeep
                     </label>
                   </div>
@@ -360,12 +377,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Truck'
                       name='Truck'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Truck'>
+                    <label className='custom-control-label' for='Truck'>
                       Truck
                     </label>
                   </div>
@@ -377,12 +394,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Bus'
                       name='Bus'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Bus'>
+                    <label className='custom-control-label' for='Bus'>
                       Bus
                     </label>
                   </div>
@@ -413,7 +430,7 @@ class BuyItNow extends Component {
                   </strong>
                 </button>
 
-                <div class='collapse' id='country'>
+                <div className='collapse' id='country'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -422,12 +439,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='United States'
                       name='United States'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='United States'>
+                    <label className='custom-control-label' for='United States'>
                       United States
                     </label>
                   </div>
@@ -439,12 +456,15 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='United Kingdom'
                       name='United Kingdom'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='United Kingdom'>
+                    <label
+                      className='custom-control-label'
+                      for='United Kingdom'
+                    >
                       United Kingdom
                     </label>
                   </div>
@@ -456,12 +476,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Australia'
                       name='Australia'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='Australia'>
+                    <label className='custom-control-label' for='Australia'>
                       Australia
                     </label>
                   </div>
@@ -474,12 +494,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Japan'
                       name='Japan'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='Japan'>
+                    <label className='custom-control-label' for='Japan'>
                       Japan
                     </label>
                   </div>
@@ -492,12 +512,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Pakistan'
                       name='Pakistan'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='Pakistan'>
+                    <label className='custom-control-label' for='Pakistan'>
                       Pakistan
                     </label>
                   </div>
@@ -527,7 +547,7 @@ class BuyItNow extends Component {
                     ></i>
                   </strong>
                 </button>
-                <div class='collapse' id='city'>
+                <div className='collapse' id='city'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -536,10 +556,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Karachi'
                     />
-                    <label class='custom-control-label' for='Karachi'>
+                    <label className='custom-control-label' for='Karachi'>
                       Karachi
                     </label>
                   </div>
@@ -552,10 +572,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Lahore'
                     />
-                    <label class='custom-control-label' for='Lahore'>
+                    <label className='custom-control-label' for='Lahore'>
                       Lahore
                     </label>
                   </div>
@@ -568,10 +588,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Peshawar'
                     />
-                    <label class='custom-control-label' for='Peshawar'>
+                    <label className='custom-control-label' for='Peshawar'>
                       Peshawar
                     </label>
                   </div>
@@ -584,10 +604,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Islamabad'
                     />
-                    <label class='custom-control-label' for='Islamabad'>
+                    <label className='custom-control-label' for='Islamabad'>
                       Islamabad
                     </label>
                   </div>
@@ -600,10 +620,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Quetta'
                     />
-                    <label class='custom-control-label' for='Quetta'>
+                    <label className='custom-control-label' for='Quetta'>
                       Quetta
                     </label>
                   </div>
@@ -634,7 +654,7 @@ class BuyItNow extends Component {
                   </strong>
                 </button>
 
-                <div class='collapse' id='make'>
+                <div className='collapse' id='make'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -643,12 +663,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Toyota'
                       name='Toyota'
                       onChange={this.makeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Toyota'>
+                    <label className='custom-control-label' for='Toyota'>
                       Toyota
                     </label>
                   </div>
@@ -661,10 +681,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Honda'
                     />
-                    <label class='custom-control-label' for='Honda'>
+                    <label className='custom-control-label' for='Honda'>
                       Honda
                     </label>
                   </div>
@@ -677,10 +697,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Suzuki'
                     />
-                    <label class='custom-control-label' for='Suzuki'>
+                    <label className='custom-control-label' for='Suzuki'>
                       Suzuki
                     </label>
                   </div>
@@ -693,10 +713,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Volkswagen'
                     />
-                    <label class='custom-control-label' for='Volkswagen'>
+                    <label className='custom-control-label' for='Volkswagen'>
                       Volkswagen
                     </label>
                   </div>
@@ -709,10 +729,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Mercedes'
                     />
-                    <label class='custom-control-label' for='Mercedes'>
+                    <label className='custom-control-label' for='Mercedes'>
                       Mercedes
                     </label>
                   </div>
@@ -743,7 +763,7 @@ class BuyItNow extends Component {
                   </strong>
                 </button>
 
-                <div class='collapse' id='model'>
+                <div className='collapse' id='model'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -752,12 +772,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Corolla'
                       name='Corolla'
                       onChange={this.modelChangeHandler}
                     />
-                    <label class='custom-control-label' for='Corolla'>
+                    <label className='custom-control-label' for='Corolla'>
                       Corolla
                     </label>
                   </div>
@@ -769,12 +789,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Yaris'
                       name='Yaris'
                       onChange={this.modelChangeHandler}
                     />
-                    <label class='custom-control-label' for='Yaris'>
+                    <label className='custom-control-label' for='Yaris'>
                       Yaris
                     </label>
                   </div>
@@ -786,12 +806,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Fortuner'
                       name='Corolla'
                       onChange={this.modelChangeHandler}
                     />
-                    <label class='custom-control-label' for='Fortuner'>
+                    <label className='custom-control-label' for='Fortuner'>
                       Fortuner
                     </label>
                   </div>
@@ -804,10 +824,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Prado'
                     />
-                    <label class='custom-control-label' for='Prado'>
+                    <label className='custom-control-label' for='Prado'>
                       Prado
                     </label>
                   </div>
@@ -820,10 +840,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Hilux'
                     />
-                    <label class='custom-control-label' for='Hilux'>
+                    <label className='custom-control-label' for='Hilux'>
                       Hilux
                     </label>
                   </div>
@@ -854,8 +874,8 @@ class BuyItNow extends Component {
                   </strong>
                 </button>
 
-                <div class='collapse' id='year'>
-                  <select class='custom-select my-2 mx-2'>
+                <div className='collapse' id='year'>
+                  <select className='custom-select my-2 mx-2'>
                     <option selected>From</option>
                     <option value='1'>2020</option>
                     <option value='2'>2019</option>
@@ -928,7 +948,7 @@ class BuyItNow extends Component {
                     ></i>
                   </strong>
                 </button>
-                <div class='collapse' id='price'>
+                <div className='collapse' id='price'>
                   <input
                     type='text'
                     name='price'
@@ -1011,7 +1031,7 @@ class BuyItNow extends Component {
                     ></i>
                   </strong>
                 </button>
-                <div class='collapse' id='body-type'>
+                <div className='collapse' id='body-type'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -1020,12 +1040,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Hatchback'
                       name='Hatchback'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Hatchback'>
+                    <label className='custom-control-label' for='Hatchback'>
                       Hatchback
                     </label>
                   </div>
@@ -1037,12 +1057,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Sedan'
                       name='Sedan'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Sedan'>
+                    <label className='custom-control-label' for='Sedan'>
                       Sedan
                     </label>
                   </div>
@@ -1054,12 +1074,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='SUV'
                       name='SUV'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='SUV'>
+                    <label className='custom-control-label' for='SUV'>
                       SUV
                     </label>
                   </div>
@@ -1072,12 +1092,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='MPV'
                       name='MPV'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='MPV'>
+                    <label className='custom-control-label' for='MPV'>
                       MPV
                     </label>
                   </div>
@@ -1090,12 +1110,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       name='Jeep'
                       onChange={this.bodyTypeChangeHandler}
                       id='Jeep'
                     />
-                    <label class='custom-control-label' for='Jeep'>
+                    <label className='custom-control-label' for='Jeep'>
                       Jeep
                     </label>
                   </div>
@@ -1107,12 +1127,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Truck'
                       name='Truck'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Truck'>
+                    <label className='custom-control-label' for='Truck'>
                       Truck
                     </label>
                   </div>
@@ -1124,12 +1144,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Bus'
                       name='Bus'
                       onChange={this.bodyTypeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Bus'>
+                    <label className='custom-control-label' for='Bus'>
                       Bus
                     </label>
                   </div>
@@ -1160,7 +1180,7 @@ class BuyItNow extends Component {
                   </strong>
                 </button>
 
-                <div class='collapse' id='country'>
+                <div className='collapse' id='country'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -1169,12 +1189,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='United States'
                       name='United States'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='United States'>
+                    <label className='custom-control-label' for='United States'>
                       United States
                     </label>
                   </div>
@@ -1186,12 +1206,15 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='United Kingdom'
                       name='United Kingdom'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='United Kingdom'>
+                    <label
+                      className='custom-control-label'
+                      for='United Kingdom'
+                    >
                       United Kingdom
                     </label>
                   </div>
@@ -1203,12 +1226,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Australia'
                       name='Australia'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='Australia'>
+                    <label className='custom-control-label' for='Australia'>
                       Australia
                     </label>
                   </div>
@@ -1221,12 +1244,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Japan'
                       name='Japan'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='Japan'>
+                    <label className='custom-control-label' for='Japan'>
                       Japan
                     </label>
                   </div>
@@ -1239,12 +1262,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Pakistan'
                       name='Pakistan'
                       onChange={this.countryChangeHandler}
                     />
-                    <label class='custom-control-label' for='Pakistan'>
+                    <label className='custom-control-label' for='Pakistan'>
                       Pakistan
                     </label>
                   </div>
@@ -1274,7 +1297,7 @@ class BuyItNow extends Component {
                     ></i>
                   </strong>
                 </button>
-                <div class='collapse' id='city'>
+                <div className='collapse' id='city'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -1283,10 +1306,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Karachi'
                     />
-                    <label class='custom-control-label' for='Karachi'>
+                    <label className='custom-control-label' for='Karachi'>
                       Karachi
                     </label>
                   </div>
@@ -1299,10 +1322,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Lahore'
                     />
-                    <label class='custom-control-label' for='Lahore'>
+                    <label className='custom-control-label' for='Lahore'>
                       Lahore
                     </label>
                   </div>
@@ -1315,10 +1338,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Peshawar'
                     />
-                    <label class='custom-control-label' for='Peshawar'>
+                    <label className='custom-control-label' for='Peshawar'>
                       Peshawar
                     </label>
                   </div>
@@ -1331,10 +1354,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Islamabad'
                     />
-                    <label class='custom-control-label' for='Islamabad'>
+                    <label className='custom-control-label' for='Islamabad'>
                       Islamabad
                     </label>
                   </div>
@@ -1347,10 +1370,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Quetta'
                     />
-                    <label class='custom-control-label' for='Quetta'>
+                    <label className='custom-control-label' for='Quetta'>
                       Quetta
                     </label>
                   </div>
@@ -1381,7 +1404,7 @@ class BuyItNow extends Component {
                   </strong>
                 </button>
 
-                <div class='collapse' id='make'>
+                <div className='collapse' id='make'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -1390,12 +1413,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Toyota'
                       name='Toyota'
                       onChange={this.makeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Toyota'>
+                    <label className='custom-control-label' for='Toyota'>
                       Toyota
                     </label>
                   </div>
@@ -1408,12 +1431,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Honda'
                       name='Honda'
                       onChange={this.makeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Honda'>
+                    <label className='custom-control-label' for='Honda'>
                       Honda
                     </label>
                   </div>
@@ -1426,12 +1449,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Suzuki'
                       name='Suzuki'
                       onChange={this.makeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Suzuki'>
+                    <label className='custom-control-label' for='Suzuki'>
                       Suzuki
                     </label>
                   </div>
@@ -1444,12 +1467,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Volkswagen'
                       name='Volkswagen'
                       onChange={this.makeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Volkswagen'>
+                    <label className='custom-control-label' for='Volkswagen'>
                       Volkswagen
                     </label>
                   </div>
@@ -1462,12 +1485,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Mercedes'
                       name='Mercedes'
                       onChange={this.makeChangeHandler}
                     />
-                    <label class='custom-control-label' for='Mercedes'>
+                    <label className='custom-control-label' for='Mercedes'>
                       Mercedes
                     </label>
                   </div>
@@ -1498,7 +1521,7 @@ class BuyItNow extends Component {
                   </strong>
                 </button>
 
-                <div class='collapse' id='model'>
+                <div className='collapse' id='model'>
                   <div
                     className={[
                       classes['checkbox'],
@@ -1507,12 +1530,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Corolla'
                       name='Corolla'
                       onChange={this.modelChangeHandler}
                     />
-                    <label class='custom-control-label' for='Corolla'>
+                    <label className='custom-control-label' for='Corolla'>
                       Corolla
                     </label>
                   </div>
@@ -1524,12 +1547,12 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Yaris'
                       name='Yaris'
                       onChange={this.modelChangeHandler}
                     />
-                    <label class='custom-control-label' for='Yaris'>
+                    <label className='custom-control-label' for='Yaris'>
                       Yaris
                     </label>
                   </div>
@@ -1541,10 +1564,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Fortuner'
                     />
-                    <label class='custom-control-label' for='Fortuner'>
+                    <label className='custom-control-label' for='Fortuner'>
                       Fortuner
                     </label>
                   </div>
@@ -1557,10 +1580,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Prado'
                     />
-                    <label class='custom-control-label' for='Prado'>
+                    <label className='custom-control-label' for='Prado'>
                       Prado
                     </label>
                   </div>
@@ -1573,10 +1596,10 @@ class BuyItNow extends Component {
                   >
                     <input
                       type='checkbox'
-                      class='custom-control-input'
+                      className='custom-control-input'
                       id='Hilux'
                     />
-                    <label class='custom-control-label' for='Hilux'>
+                    <label className='custom-control-label' for='Hilux'>
                       Hilux
                     </label>
                   </div>
@@ -1610,9 +1633,8 @@ class BuyItNow extends Component {
                 <div
                   className='collapse'
                   style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
+                    textAlign: 'center',
+                    margin: 'auto',
                   }}
                   id='year'
                 >
@@ -1620,10 +1642,10 @@ class BuyItNow extends Component {
                     value=''
                     dateFormat='YYYY'
                     timeFormat={false}
-                    // inputProps={{ className: classes['date-time'] }}
+                    inputProps={{ className: classes['date-time'] }}
 
                     // isValidDate={this.disableFutureDt}
-                    // onChange={this.onYearChangeHandler}
+                    //onChange={this.onYearChangeHandler}
                   />
 
                   <Datetime
@@ -1632,7 +1654,7 @@ class BuyItNow extends Component {
                     timeFormat={false}
                     // inputProps={{ className: classes['date-time'] }}
                     // isValidDate={this.disableFutureDt}
-                    // onChange={this.onYearChangeHandler}
+                    //onChange={this.onYearChangeHandler}
                   />
                 </div>
               </div>
@@ -1660,7 +1682,7 @@ class BuyItNow extends Component {
                     ></i>
                   </strong>
                 </button>
-                <div class='collapse' id='price'>
+                <div className='collapse' id='price'>
                   <input
                     type='text'
                     name='price'
@@ -1729,6 +1751,30 @@ class BuyItNow extends Component {
                 <span className='sr-only'>Loading...</span>
               </div>
             )}
+
+            {this.state.showModal ? (
+              <h1 style={{ textAlign: 'center', margin: 'auto' }}>
+                <Modal
+                  show={this.state.showModal}
+                  onHide={this.onModalClose}
+                  centered
+                >
+                  <Modal.Body style={{ textAlign: 'center' }}>
+                    <span>
+                      <strong>Sorry, No Results Found</strong>
+                    </span>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      className={classes['modal-btn']}
+                      onClick={this.onModalClose}
+                    >
+                      Close
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+              </h1>
+            ) : null}
           </div>
         </div>
         <nav aria-label='...' className='my-5'>
