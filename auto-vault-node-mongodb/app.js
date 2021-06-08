@@ -18,6 +18,14 @@ const {
   getBids,
 } = require('./socketUsers');
 
+const {
+  addMessagingUser,
+  addMessage,
+  removeMessagingUser,
+  geMessagingtUser,
+  getMessagingUsersInRoom,
+} = require('./socketMessage');
+
 const authRoutes = require('./routes/auth');
 
 const vehicleRoutes = require('./routes/vehicle');
@@ -61,6 +69,22 @@ mongoose
   .catch((err) => console.log(err));
 
 io.on('connection', (socket) => {
+  socket.on('joinThread', ({ name, room }, callback) => {
+    const { error, user } = addMessagingUser({ id: socket.id, name, room });
+    console.log(user);
+    if (error) {
+      return callback(error);
+    }
+    socket.join(user.room);
+    io.in(user.room).emit('threadUserJoined', {
+      message: `${name} has joined!`,
+    });
+  });
+
+  socket.on('sendMessage', ({ message, id, threadId }) => {
+    const thread = addMessage(message, id, threadId);
+    io.emit('updateList', { thread: thread });
+  });
   socket.on('join', ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
     if (error) {

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { convertToRaw, convertFromRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import { Editor } from 'react-draft-wysiwyg';
+import classes from './CreateThread.module.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import axios from 'axios';
 import thunk from 'redux-thunk';
@@ -81,7 +82,7 @@ class CreateThread extends Component {
               className='form-control'
               id='exampleInputEmail1'
               aria-describedby='emailHelp'
-              placeholder='Enter email'
+              placeholder='Write Thread Title'
               value={this.state.title}
               onChange={this.onTitleChangeHandler}
             />
@@ -93,10 +94,13 @@ class CreateThread extends Component {
               value={this.state.category}
               onChange={this.onCategoryChangeHandler}
             >
-              <option selected>Open this select menu</option>
-              <option value='1'>One</option>
-              <option value='2'>Two</option>
-              <option value='3'>Three</option>
+              <option selected>Select Category</option>
+              <option value='General Car Discussion'>
+                General Car Discussion
+              </option>
+              <option value='Technical Forums'>Technical Forums</option>
+              <option value='Buy, Sell & Exchange'>Buy, Sell & Exchange</option>
+              <option value='Casual Forums'>Casual Forums</option>
             </select>
           </div>
           <div className='form-group'>
@@ -106,15 +110,16 @@ class CreateThread extends Component {
               toolbarClassName='toolbarClassName'
               wrapperClassName='wrapperClassName'
               editorClassName='editorClassName'
+              editorStyle={{ border: '1px solid #F1F1F1', padding: '0' }}
               onEditorStateChange={this.onDescriptionChangeHandler}
               toolbar={{ image: { uploadCallback } }}
             />
-            ;
           </div>
-
-          <button type='submit' className='btn btn-primary'>
-            Submit
-          </button>
+          <div style={{ width: '100%', textAlign: 'center' }}>
+            <button type='submit' className={classes['btn-submit']}>
+              Create Thread
+            </button>
+          </div>
         </form>
         <div dangerouslySetInnerHTML={{ __html: this.state.result }} />
       </Fragment>

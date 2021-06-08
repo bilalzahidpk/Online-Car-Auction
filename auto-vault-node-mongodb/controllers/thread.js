@@ -24,3 +24,53 @@ exports.createThread = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getThread = async (req, res, next) => {
+  try {
+    const thread = await Thread.findById(req.query.id)
+      .populate('creator')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'creator',
+          model: 'User',
+        },
+      });
+    res.status(200).json({ thread: thread });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.getThreads = async (req, res, next) => {
+  try {
+    const thread = await Thread.aggregate([
+      { $sort: { createdAt: -1 } },
+      {
+        $group: {
+          _id: '$category',
+          title: { $push: '$title' },
+          id: { $push: '$_id' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: '$_id',
+          mostRecentTitle: { $slice: ['$title', 0, 3] },
+          ids: { $slice: ['$id', 0, 3] },
+        },
+      },
+    ]);
+
+    res.status(200).json({ thread: thread });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};

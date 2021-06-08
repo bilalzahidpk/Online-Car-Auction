@@ -12,6 +12,7 @@ const threadSchema = new Schema(
       ref: 'User',
       required: true,
     },
+    category: { type: String, required: true },
     description: {
       type: Object,
       required: true,

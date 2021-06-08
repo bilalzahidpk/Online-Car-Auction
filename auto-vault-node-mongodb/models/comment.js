@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const commentSchema = new Schema(
   {
     comment: {
-      type: String,
+      type: Object,
       required: true,
     },
     creator: {
@@ -18,7 +18,7 @@ const commentSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, minimize: false }
 );
 
 module.exports = mongoose.model('Comment', commentSchema);

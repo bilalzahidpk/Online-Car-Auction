@@ -12,6 +12,7 @@ import Layout from './hoc/Layout/Layout';
 import Trends from './containers/Trends/Trends';
 import Forums from './containers/Forums/Forum/Forum';
 import CreateThread from './containers/Forums/CreateThread/CreateThread';
+import Thread from './containers/Forums/Thread/Thread';
 import CarDetail from './components/CarDetail/CarDetail';
 import { useSelector } from 'react-redux';
 
@@ -27,6 +28,7 @@ function App() {
       <Route path='/signup' component={SignUp} />
       <Route path='/forums' component={Forums} />
       <Route path='/signin' component={SignIn} />
+      <Route path='/thread' component={Thread} />
       <Route path='/cardetail/:id' component={CarDetail} />
       <Route path='/trends' component={Trends} />
       <Route path='/' exact component={Home} />
@@ -45,6 +47,7 @@ function App() {
         <Route path='/forums' component={Forums} />
         <Route path='/createthread' component={CreateThread} />
         <Route path='/cardetail/:id' component={CarDetail} />
+        <Route path='/thread' component={Thread} />
         <Route path='/trends' component={Trends} />
         <Route path='/' exact component={Home} />
         <Redirect to='/' exact component={Home} />
