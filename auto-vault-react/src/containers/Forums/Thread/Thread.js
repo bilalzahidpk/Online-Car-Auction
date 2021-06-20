@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { Alert } from 'react-bootstrap';
 
 let socket;
+
 class Thread extends Component {
   state = {
     thread: '',
@@ -48,7 +49,6 @@ class Thread extends Component {
       })
       .then((res) =>
         this.setState({ thread: res.data.thread }, () => {
-          console.log(this.state.thread);
           socket.emit(
             'joinThread',
             {
@@ -73,10 +73,26 @@ class Thread extends Component {
               }, 2000);
             });
           });
+          socket.on(
+            'updateComments',
+            ({ comment }) => {
+              let updateComments = [...this.state.thread.comments, comment];
+              console.log(updateComments);
+              this.setState({
+                thread: {
+                  ...this.state.thread,
+                  comments: updateComments,
+                },
+              });
+              console.log('In Update Comments');
+            }
+            // () => console.log(this.state.thread)
+          );
         })
       )
       .catch((err) => console.log(err));
   }
+
   componentWillUnmount() {
     socket.disconnect();
   }
@@ -85,6 +101,7 @@ class Thread extends Component {
   };
 
   sendMessage = () => {
+    console.log('In Send Message');
     if (this.state.text) {
       socket.emit('sendMessage', {
         message: convertToRaw(this.state.text.getCurrentContent()),
@@ -104,7 +121,6 @@ class Thread extends Component {
 
     let threadDate, threadYear, threadMonth;
     if (this.state.thread.createdAt) {
-      console.log(this.state.thread.createdAt);
       const threadDate = new Date(this.state.thread.createdAt);
       threadYear = threadDate.getFullYear();
       threadMonth = threadDate.getMonth() + 1;
@@ -215,15 +231,13 @@ class Thread extends Component {
                       </div>
                     </div>
                   </div>
-                  {/* <div style={{ position: 'relative', left: '43vw' }}>
-            <p>
-              {this.state.thread.createdAt
-                ? this.state.month[threadMonth].slice(0, 3) +
-                  " '" +
-                  (threadYear % 100)
-                : null}
-            </p>
-          </div> */}
+                  <div style={{ position: 'relative', left: '43vw' }}>
+                    <p>
+                      {item.createdAt
+                        ? moment.utc(item.createdAt).format("MMM'YY")
+                        : null}
+                    </p>
+                  </div>
                 </div>
                 <div
                   className={classes['comment']}

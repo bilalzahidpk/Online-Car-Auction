@@ -22,7 +22,7 @@ const {
   addMessagingUser,
   addMessage,
   removeMessagingUser,
-  geMessagingtUser,
+  getMessagingUser,
   getMessagingUsersInRoom,
 } = require('./socketMessage');
 
@@ -71,7 +71,6 @@ mongoose
 io.on('connection', (socket) => {
   socket.on('joinThread', ({ name, room }, callback) => {
     const { error, user } = addMessagingUser({ id: socket.id, name, room });
-    console.log(user);
     if (error) {
       return callback(error);
     }
@@ -81,9 +80,18 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('sendMessage', ({ message, id, threadId }) => {
-    const thread = addMessage(message, id, threadId);
-    io.emit('updateList', { thread: thread });
+  socket.on('sendMessage', async ({ message, id, threadId }) => {
+    try {
+      const user = getMessagingUser(socket.id);
+      console.log(getMessagingUsersInRoom(user.room));
+      const comment = await addMessage(message, id, threadId);
+      if (comment) {
+        console.log(comment);
+        io.in(user.room).emit('updateComments', { comment: comment });
+      }
+    } catch (err) {
+      throw err;
+    }
   });
   socket.on('join', ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
@@ -97,18 +105,18 @@ io.on('connection', (socket) => {
   });
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
+    const messagingUser = removeMessagingUser(socket.id);
     if (user) {
       socket.broadcast
         .to(user.room)
         .emit('leftMessage', `${user.name} has left the auction`);
-      console.log('left');
     }
   });
   socket.on('placeBid', ({ bid }) => {
     const user = getUser(socket.id);
 
     const showBid = addBid(bid, user);
-    // console.log(bids);
+
     if (showBid) {
       io.in(user.room).emit('bidSuccessful', {
         message: `${user.name} has placed a bid of ${showBid.totalBid}$`,

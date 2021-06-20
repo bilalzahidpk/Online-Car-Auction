@@ -33,17 +33,25 @@ const getMessagingUsersInRoom = (room) =>
 const addMessage = async (message, id, threadId) => {
   try {
     const thread = await Thread.findById(threadId);
-    console.log(thread);
     const comment = new Comment({
       creator: mongoose.Types.ObjectId(id),
       comment: message,
       thread: mongoose.Types.ObjectId(threadId),
     });
-    const savedComment = await comment.save();
+    const savedComment = await comment.save().then((t) =>
+      Comment.findById(comment._id)
+        .populate('creator')
+        .populate({
+          path: 'comments',
+          populate: {
+            path: 'creator',
+            model: 'User',
+          },
+        })
+    );
     thread.comments.push(savedComment);
     const savedThread = await thread.save();
-    console.log(thread);
-    return savedThread;
+    return savedComment.toJSON();
   } catch (err) {
     return err;
   }

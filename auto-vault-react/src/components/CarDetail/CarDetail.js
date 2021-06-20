@@ -79,6 +79,7 @@ class CarDetail extends Component {
     console.log('You');
     socket.on('informWinner', ({ message }) => {
       this.setState({ showModal: true, message: message });
+      console.log('Infrom WInner');
     });
   };
 
