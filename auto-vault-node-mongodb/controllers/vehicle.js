@@ -52,7 +52,7 @@ exports.getVehicles = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
 
   try {
-    const vehicles = await Vehicle.find()
+    const vehicles = await Vehicle.find({ isAuction: true })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec();

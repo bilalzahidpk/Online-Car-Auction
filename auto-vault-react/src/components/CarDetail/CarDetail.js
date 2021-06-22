@@ -16,6 +16,7 @@ import { Bar } from 'react-chartjs-2';
 import data from '../../assets/Car_sales.csv';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
+import StripeCheckout from 'react-stripe-checkout';
 
 // import pic1 from './1.jpg';
 // import pic2 from './2.jpg';
@@ -25,6 +26,8 @@ import axios from 'axios';
 import { timer } from 'd3';
 
 let socket;
+let STRIPE_PUBLISHABLE_KEY =
+  'pk_test_51J4vwtH7Iinz1VCHjOXPL2hObZGD7D06BGfIiz9wtzgL4LLivcrmbW7atpmlsZgLwXNzFfyK0U2TMvrCdyc9HmEP00urlLQkY9';
 var countDownTime = 0;
 
 class CarDetail extends Component {
@@ -47,11 +50,23 @@ class CarDetail extends Component {
     startAuction: false,
   };
 
+  makePayment = (token) => {
+    console.log('hello');
+    socket.emit('completePayment', {
+      token: token,
+      buyerUserId: this.props.user._id,
+      sellerUserId: this.props.location.vehicle.creator,
+      room: this.props.location.vehicle.vin,
+      name: `${this.props.location.vehicle.make} ${this.props.location.vehicle.model} ${this.props.location.vehicle.year}`,
+    });
+  };
+
   joinAuction = () => {
     socket.emit(
       'join',
       {
         name: this.props?.user?.name,
+        userId: this.props.user._id,
         room: this.props.location?.vehicle?.vin,
       },
       (err) => {
@@ -178,13 +193,20 @@ class CarDetail extends Component {
               </span>
             </Modal.Body>
             <Modal.Footer>
-              <Button
-                variant='success'
-                className={classes['button']}
-                onClick={this.onModalClose}
+              <StripeCheckout
+                stripeKey={STRIPE_PUBLISHABLE_KEY}
+                token={this.makePayment}
+                name='Buy Car'
+                email={this.props.user.email}
               >
-                Proceed to Buy Car
-              </Button>
+                <Button
+                  variant='success'
+                  className={classes['button']}
+                  onClick={this.onModalClose}
+                >
+                  Proceed to Buy Car
+                </Button>
+              </StripeCheckout>
               <Button
                 variant='danger'
                 className={classes['button']}

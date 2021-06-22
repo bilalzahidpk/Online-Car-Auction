@@ -7,6 +7,11 @@ const vehicleSchema = new Schema(
       type: String,
       required: true,
     },
+    isAuction: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
     year: {
       type: String,
       required: true,

@@ -2,7 +2,7 @@ const users = [];
 const bids = [];
 const roomBid = [];
 
-const addUser = ({ id, name, room }) => {
+const addUser = ({ id, name, userId, room }) => {
   const existingUser = users.find(
     (user) => user.room === room && user.name === name
   );
@@ -10,7 +10,7 @@ const addUser = ({ id, name, room }) => {
   if (!name || !room) return { error: 'Username and room are required' };
   if (existingUser) return { error: 'You are already in the Auction Room' };
 
-  const user = { id, name, room };
+  const user = { id, name, userId, room };
 
   users.push(user);
 

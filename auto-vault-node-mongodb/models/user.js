@@ -57,6 +57,26 @@ const userSchema = new Schema(
         ref: 'BlogComment',
       },
     ],
+    soldVehicles: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Vehicle',
+      },
+    ],
+
+    unSoldVehicles: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Vehicle',
+      },
+    ],
+
+    boughtVehicles: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Vehicle',
+      },
+    ],
   },
   { timestamps: true }
 );

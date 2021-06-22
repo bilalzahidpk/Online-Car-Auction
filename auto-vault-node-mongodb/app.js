@@ -6,7 +6,17 @@ const cors = require('cors');
 const socketio = require('socket.io');
 const http = require('http');
 
+const Vehicle = require('./models/vehicle');
+const User = require('./models/user');
+
 const bodyParser = require('body-parser');
+
+const STRIPE_SECRET_KEY =
+  'sk_test_51J4vwtH7Iinz1VCHDJrr9CB0kbTq5t4X10kmkOiUxvwY5HAEZKszGFvno77Bg1Z4FIN9dN6ox6g1lXexWeVKnKjy00v3i7fU8i';
+const STRIPE_PUBLISHABLE_KEY =
+  'pk_test_51J4vwtH7Iinz1VCHjOXPL2hObZGD7D06BGfIiz9wtzgL4LLivcrmbW7atpmlsZgLwXNzFfyK0U2TMvrCdyc9HmEP00urlLQkY9';
+
+const stripe = require('stripe')(STRIPE_SECRET_KEY);
 
 let topBids;
 const {
@@ -93,8 +103,8 @@ io.on('connection', (socket) => {
       throw err;
     }
   });
-  socket.on('join', ({ name, room }, callback) => {
-    const { error, user } = addUser({ id: socket.id, name, room });
+  socket.on('join', ({ name, room, userId }, callback) => {
+    const { error, user } = addUser({ id: socket.id, name, userId, room });
     if (error) {
       return callback(error);
     }
@@ -126,7 +136,6 @@ io.on('connection', (socket) => {
   socket.on('auctionFinished', ({ room }) => {
     const bids = getBids();
     bidValue = 0;
-    console.log(bids);
     topBids = bids.reduce((unique, o) => {
       if (
         !unique.some(
@@ -137,11 +146,49 @@ io.on('connection', (socket) => {
       }
       return unique;
     }, []);
-    let winingUser = topBids.find((bid) => bid.user.room === room);
-    io.to(winingUser.user.id).emit('informWinner', {
-      message: `You have won the Auction in Room ${winingUser.user.room}`,
+    let winningUser = topBids.find((bid) => bid.user.room === room);
+    io.to(winningUser.user.id).emit('informWinner', {
+      message: `You have won the Auction in Room ${winningUser.user.room}`,
     });
   });
+
+  socket.on(
+    'completePayment',
+    async ({ token, buyerUserId, sellerUserId, room, name }) => {
+      try {
+        let winningUser = topBids.find((bid) => bid.user.room === room);
+        // console.log(winningUser.totalBid);
+        const vehicle = await Vehicle.findOne({ vin: room });
+        const idempotencyKey = vehicle._id;
+
+        const customer = await stripe.customers.create({ source: token.id });
+        const result = await stripe.charges.create(
+          {
+            amount: winningUser.totalBid * 100,
+            currency: 'usd',
+            customer: customer.id,
+            description: `${vehicle.make} ${vehicle.model} ${vehicle.year}`,
+          },
+          { idempotencyKey }
+        );
+        const [buyerUser, sellerUser] = await Promise.all([
+          User.findById({ _id: buyerUserId }),
+          User.findById({ _id: sellerUserId }),
+        ]);
+        vehicle.soldPrice = winningUser.totalBid;
+        vehicle.isAuction = false;
+        const savedVehicle = await vehicle.save();
+        buyerUser.boughtVehicles.push(savedVehicle);
+        const savedBuyerUser = await buyerUser.save();
+        sellerUser.soldVehicles.push(savedVehicle);
+        const savedSellerUser = await sellerUser.save();
+        console.log(savedSellerUser);
+        console.log(result);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  );
 
   socket.on('refreshTime', () => {
     const user = getUser(socket.id);
