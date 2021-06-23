@@ -15,8 +15,11 @@ import CreateThread from './containers/Forums/CreateThread/CreateThread';
 import Thread from './containers/Forums/Thread/Thread';
 import CarDetail from './components/CarDetail/CarDetail';
 import { useSelector } from 'react-redux';
+import { I8nProvider, LOCALES } from './i18n';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 
-function App() {
+function App(props) {
   let isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   let routes = (
@@ -54,7 +57,17 @@ function App() {
       </Switch>
     );
   }
-  return <Layout>{routes}</Layout>;
+  return (
+    <I8nProvider locale={props.language}>
+      <Layout>{routes}</Layout>
+    </I8nProvider>
+  );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    language: state.language.language,
+  };
+};
+
+export default connect(mapStateToProps, null)(App);

@@ -16,3 +16,5 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
 export const CLEAR_ERROR = 'CLEAR_ERROR';
+
+export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';

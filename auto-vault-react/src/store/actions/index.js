@@ -8,3 +8,5 @@ export {
   loginFail,
   clearError,
 } from './auth';
+
+export { changeLanguage } from './language';

@@ -6,6 +6,7 @@ import classes from './BuyItNow.module.css';
 import axios from 'axios';
 import { Modal, Button, ThemeProvider } from 'react-bootstrap';
 import { relativeTimeThreshold } from 'moment';
+import translate from '../../i18n/translate';
 
 class BuyItNow extends Component {
   state = {
@@ -271,7 +272,7 @@ class BuyItNow extends Component {
                   onClick={this.handleBodyTypeOpen}
                 >
                   <strong>
-                    Body Type{' '}
+                    {translate('BodyType')}{' '}
                     <i
                       className={
                         this.state.bodyTypeOpen
@@ -419,7 +420,7 @@ class BuyItNow extends Component {
                   onClick={this.handleCountryOpen}
                 >
                   <strong>
-                    Country{' '}
+                    {translate('Country')}{' '}
                     <i
                       className={
                         this.state.countryOpen
@@ -537,7 +538,7 @@ class BuyItNow extends Component {
                   onClick={this.handleCityOpen}
                 >
                   <strong>
-                    City{' '}
+                    {translate('City')}{' '}
                     <i
                       className={
                         this.state.cityOpen
@@ -643,7 +644,7 @@ class BuyItNow extends Component {
                   onClick={this.handleMakeOpen}
                 >
                   <strong>
-                    Make{' '}
+                    {translate('Make')}{' '}
                     <i
                       className={
                         this.state.makeOpen
@@ -752,7 +753,7 @@ class BuyItNow extends Component {
                   onClick={this.handleModelOpen}
                 >
                   <strong>
-                    Model{' '}
+                    {translate('Model')}{' '}
                     <i
                       className={
                         this.state.modelOpen
@@ -863,7 +864,7 @@ class BuyItNow extends Component {
                   onClick={this.handleYearOpen}
                 >
                   <strong>
-                    Year{' '}
+                    {translate('Year')}{' '}
                     <i
                       className={
                         this.state.yearOpen
@@ -1021,7 +1022,7 @@ class BuyItNow extends Component {
                   onClick={this.handleBodyTypeOpen}
                 >
                   <strong>
-                    Body Type{' '}
+                    {translate('BodyType')}{' '}
                     <i
                       className={
                         this.state.bodyTypeOpen
@@ -1169,7 +1170,7 @@ class BuyItNow extends Component {
                   onClick={this.handleCountryOpen}
                 >
                   <strong>
-                    Country{' '}
+                    {translate('Country')}{' '}
                     <i
                       className={
                         this.state.countryOpen
@@ -1287,7 +1288,7 @@ class BuyItNow extends Component {
                   onClick={this.handleCityOpen}
                 >
                   <strong>
-                    City{' '}
+                    {translate('City')}{' '}
                     <i
                       className={
                         this.state.cityOpen
@@ -1393,7 +1394,7 @@ class BuyItNow extends Component {
                   onClick={this.handleMakeOpen}
                 >
                   <strong>
-                    Make{' '}
+                    {translate('Make')}{' '}
                     <i
                       className={
                         this.state.makeOpen
@@ -1510,7 +1511,7 @@ class BuyItNow extends Component {
                   onClick={this.handleModelOpen}
                 >
                   <strong>
-                    Model{' '}
+                    {translate('Home')}{' '}
                     <i
                       className={
                         this.state.modelOpen
@@ -1619,7 +1620,7 @@ class BuyItNow extends Component {
                   onClick={this.handleYearOpen}
                 >
                   <strong>
-                    Year{' '}
+                    {translate('Year')}{' '}
                     <i
                       className={
                         this.state.yearOpen

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import classes from './Navigation.module.css';
+import translate from '../../../i18n/translate';
 
 const Navigation = () => {
   return (
@@ -28,7 +29,7 @@ const Navigation = () => {
           <ul className='navbar-nav mr-auto'>
             <li className='nav-item active'>
               <Link className={[classes['nav'], 'nav-link'].join(' ')} to='/'>
-                Home <span className='sr-only'>(current)</span>
+                {translate('Home')} <span className='sr-only'>(current)</span>
               </Link>
             </li>
 
@@ -45,7 +46,7 @@ const Navigation = () => {
                 aria-haspopup='true'
                 aria-expanded='false'
               >
-                Auctions
+                {translate('Auctions')}
               </Link>
               <div className='dropdown-menu' aria-labelledby='navbarDropdown'>
                 <Link
@@ -54,7 +55,7 @@ const Navigation = () => {
                   )}
                   to='/buyitnow'
                 >
-                  Dealer Auctions
+                  {translate('DealerAuctions')}
                 </Link>
                 <Link
                   className={[classes['nav-dropdown'], 'dropdown-item'].join(
@@ -62,7 +63,7 @@ const Navigation = () => {
                   )}
                   to='/buyitnow'
                 >
-                  Savage Auctions
+                  {translate('SavageAuctions')}
                 </Link>
                 <Link
                   className={[classes['nav-dropdown'], 'dropdown-item'].join(
@@ -70,15 +71,7 @@ const Navigation = () => {
                   )}
                   to='/buyitnow'
                 >
-                  Live Auctions
-                </Link>
-                <Link
-                  className={[classes['nav-dropdown'], 'dropdown-item'].join(
-                    ' '
-                  )}
-                  to='/buyitnow'
-                >
-                  Buy It Now
+                  {translate('LiveAuctions')}
                 </Link>
               </div>
             </li>
@@ -87,7 +80,7 @@ const Navigation = () => {
                 className={[classes['nav'], 'nav-link'].join(' ')}
                 to='/trends'
               >
-                Trends
+                {translate('Trends')}
               </Link>
             </li>
             <li className='nav-item'>
@@ -95,7 +88,7 @@ const Navigation = () => {
                 className={[classes['nav'], 'nav-link'].join(' ')}
                 to='/forums'
               >
-                Forums
+                {translate('Forums')}
               </Link>
             </li>
 
@@ -119,7 +112,7 @@ const Navigation = () => {
                 aria-haspopup='true'
                 aria-expanded='false'
               >
-                Support
+                {translate('Support')}
               </Link>
               <div className='dropdown-menu' aria-labelledby='navbarDropdown'>
                 <Link
@@ -128,7 +121,7 @@ const Navigation = () => {
                   )}
                   to='/buyertips'
                 >
-                  Buyer Tips
+                  {translate('BuyerTips')}
                 </Link>
                 <Link
                   className={[classes['nav-dropdown'], 'dropdown-item'].join(
@@ -136,7 +129,7 @@ const Navigation = () => {
                   )}
                   to='/ourfee'
                 >
-                  Our Fee
+                  {translate('OurFee')}
                 </Link>
                 <Link
                   className={[classes['nav-dropdown'], 'dropdown-item'].join(
@@ -144,7 +137,7 @@ const Navigation = () => {
                   )}
                   to='/faq'
                 >
-                  FAQ
+                  {translate('FAQ')}
                 </Link>
               </div>
             </li>
@@ -163,7 +156,7 @@ const Navigation = () => {
                 aria-haspopup='true'
                 aria-expanded='false'
               >
-                Services
+                {translate('Services')}
               </Link>
               <div className='dropdown-menu' aria-labelledby='navbarDropdown'>
                 <Link
@@ -201,7 +194,7 @@ const Navigation = () => {
               aria-label='Search'
             />
             <button className={classes['button-search']} type='submit'>
-              Search
+              {translate('Search')}
             </button>
           </form>
         </div>
